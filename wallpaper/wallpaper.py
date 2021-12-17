@@ -9,6 +9,13 @@ import ctypes
 import platform
 
 system = platform.system()
+headers = {
+    'referer': 'https://app-api.pixiv.net/'
+}
+# clash listen to 7890, you can replace it if you need.
+proxies = {
+    'https': 'http://127.0.0.1:7890'
+}
 
 def setWallPaper(pic_path):
     if system == 'Windows':
@@ -33,15 +40,9 @@ _REQUESTS_KWARGS = {
     # 'verify': False,       # PAPI use https, an easy way is disable requests SSL verify
 }
 
-headers = {
-    'referer': 'https://app-api.pixiv.net/'
-}
-proxies = {
-    'https': 'http://127.0.0.1:7890'
-}
 path = os.path.expanduser('~').replace('\\', '/') + '/Pictures/.wallpaper/'
 if not os.path.exists(path):
-    os.mkdir(path)
+    os.makedirs(path)
 
 def dlPic(url):
     path_to_file = path + url[url.rfind('/') + 1 : ]
