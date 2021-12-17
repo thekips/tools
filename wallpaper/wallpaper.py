@@ -6,14 +6,23 @@ import requests
 import os
 from pixivpy3 import *
 import ctypes
+import platform
+
+system = platform.system()
 
 def setWallPaper(pic_path):
-    ctypes.windll.user32.SystemParametersInfoW(20, 0, pic_path, 0)
+    if system == 'Windows':
+        ctypes.windll.user32.SystemParametersInfoW(20, 0, pic_path, 0)
+    elif system == 'Linux':
+        # use follow instruction to listen the result on terminal when changing your wallpaper and replace it.
+        # 'xfconf-query -c xfce4-desktop -p /backdrop -m'
+        command = 'xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitorHDMI-0/workspace0/last-image -s '
+        print(pic_path)
+        os.system(command + pic_path)
 
 # get your refresh_token, and replace _REFRESH_TOKEN
 #  https://github.com/upbit/pixivpy/issues/158#issuecomment-778919084
 _REFRESH_TOKEN = "0zeYA-PllRYp1tfrsq_w3vHGU1rPy237JMf5oDt73c4"
-_TEST_WRITE = False
 
 # If a special network environment is meet, please configure requests as you need.
 # Otherwise, just keep it empty.
@@ -30,7 +39,9 @@ headers = {
 proxies = {
     'https': 'http://127.0.0.1:7890'
 }
-path = os.path.expanduser('~').replace('\\', '/') + '/Pictures/Saved Pictures/'
+path = os.path.expanduser('~').replace('\\', '/') + '/Pictures/.wallpaper/'
+if not os.path.exists(path):
+    os.mkdir(path)
 
 def dlPic(url):
     path_to_file = path + url[url.rfind('/') + 1 : ]
@@ -50,8 +61,8 @@ def getOri(url):
 
     return url
 
-def appapi_ranking(aapi):
-    json_result = aapi.illust_ranking('week')
+def appapi_ranking(aapi, mode='week'):
+    json_result = aapi.illust_ranking(mode)
     index = 0
     while True:
         illust = json_result.illusts[index]
@@ -66,13 +77,12 @@ def appapi_ranking(aapi):
             if not (os.path.exists(a) or os.path.exists(b)):
                 break
 
-    print(url)
+    print(illust.title, url)
     dlPic(url)
 
 def main():
     # app-api
     aapi = AppPixivAPI(**_REQUESTS_KWARGS)
-
     aapi.auth(refresh_token=_REFRESH_TOKEN)
 
     appapi_ranking(aapi)
