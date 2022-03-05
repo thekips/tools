@@ -1,0 +1,17 @@
+import os
+import requests
+
+headers = {
+    'x-xsrf-token': 'eyJpdiI6ImN6dFpaQlZFVTREYVlkT1oxYm4wY2c9PSIsInZhbHVlIjoiekU5VmZjcGFqM3RSNit3a1NHYjVMdFBSQXQyTDhxMWlZMXVnSzBlNHp4UWlXVmV1SXM5M3dHaHJQblYyTlhkTkZiNFRzNmt6QTI5XC9oUlIzcDRVaUhaK08yMkY4NDNoaU9QeDZtYUFPdk84dU9CMHkzblZPMTc2UWFNMGJ2MzJQIiwibWFjIjoiMDI2ZmE3NTA5NjU3NGJhZWEyNjhhNjMxMGVkMjAwMDViNTRkZTliMjU5ODAxN2ZhNWQxODk2YzM3MDM3OTZmMCJ9',
+    'content-type': 'application/json',
+    'x-requested-with': 'XMLHttpRequest',
+    'cookie': 'tinyUUID=eyJpdiI6InRtY015VmdSOXdWMGN4XC9wR25wTEJRPT0iLCJ2YWx1ZSI6IkNGTWlnWXpseXowdmVmZE81a0p0VU91V2FtZDlzZm9FdGhma2FvcEVKOXczTXlJbXlVdHVaa3pFdWRPUnNTc0J2amR5elpDa1RITEtaeUNuODNxQmNxQ3pQamNVd3Z4S3J1bHVYUEpYa2JnPSIsIm1hYyI6IjEzNTBmMWM0ODk3OTZmZjg1NTVlMjkyNjc1MDQ5NjliMDAzZDgyYjVhM2ZkYzBjM2QwMGM3MDZmYzYyNzZhNDUifQ%3D%3D; early-access=eyJpdiI6ImFjeSt2eGJ3RzJieVlnZVpcLzFzaUVBPT0iLCJ2YWx1ZSI6Ikt6VVBFOGpLU2VzN1FCOUhrendZOFdGeXp0U1ZoZG81c1FTRXBYOVZLSkxFUmJHWE1ZZE9IMmRcL2oxQmxEOGc3ZVJCSDdYejBQa3RtaEszajgyREEwYXVSWjFocVVEdlNPemF5cnZTdW1Scz0iLCJtYWMiOiJkODRjNGNhNjgxNGQyNzVlZjU3ZjkzMGY1NmJjNDM1MTNmZjg3ZGEyMGYyOWMwYTBkYWRlYTc3ZDMzZDg1Zjk0In0%3D; __rtgt_sid=kyg4gh6mlwrc3y; _pbjs_userid_consent_data=3524755945110770; _pubcid=1df5ff1d-b225-4aa9-84b8-65310a3f753f; __gads=ID=81fb394c5a3c34b8:T=1642268829:S=ALNI_MakXzkeqfe1BtYQg4fXd5UZY1y5mw; __stripe_mid=4134f72a-ed03-4c3a-afc8-dcbe470f9df4c64150; __stripe_sid=8077f275-3858-4241-9ee3-cd3ad915bce24d70b7; XSRF-TOKEN=eyJpdiI6ImN6dFpaQlZFVTREYVlkT1oxYm4wY2c9PSIsInZhbHVlIjoiekU5VmZjcGFqM3RSNit3a1NHYjVMdFBSQXQyTDhxMWlZMXVnSzBlNHp4UWlXVmV1SXM5M3dHaHJQblYyTlhkTkZiNFRzNmt6QTI5XC9oUlIzcDRVaUhaK08yMkY4NDNoaU9QeDZtYUFPdk84dU9CMHkzblZPMTc2UWFNMGJ2MzJQIiwibWFjIjoiMDI2ZmE3NTA5NjU3NGJhZWEyNjhhNjMxMGVkMjAwMDViNTRkZTliMjU5ODAxN2ZhNWQxODk2YzM3MDM3OTZmMCJ9; tinyurl_session=eyJpdiI6ImFEWFEyRlBBK2lSVkZnTXY2c1MrWHc9PSIsInZhbHVlIjoiQ0ZWd1wvcTJPcDFYbGxPVXZYRnI3dDIrZ3FXUis4ZlRueXlDUEZiSEJjZUVtUndabWh4SGo1TTdPcm9TeW5BVFhraEZUU3Nac2lMR3hlN0ZPWFBEK2l1bUJ2QlQ4TVVIcmh5XC9QazQ4QVRzNlJxNllINkFZWUJvWk8yMXZ0SThQbSIsIm1hYyI6ImE1YmQwZjc3ZDhhYzEzZDVkZDM1YjdlM2FiODgxNjlmMWE0ODEwMDQ4NTVlYTI1NDNjNWVmYWI4ZTgyYzQ1ZmMifQ%3D%3D',
+}
+
+url = input('Input the url: ')
+data = '{"url":"%s","domain":"tinyurl.com","alias":""}' % url
+
+response = requests.post('https://tinyurl.com/app/api/create', headers=headers, data=data)
+res = response.json()['data'][0]['aliases'][0]['tiny_url']
+os.system('echo %s | clip' % res)
+print(res)

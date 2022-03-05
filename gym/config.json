@@ -1,0 +1,9 @@
+{
+    "NetID": "zhangszh5",
+    "Password": "**********",
+    "book_date": "2022-01-13",
+    "book_time": [9, 20],
+    "switch_time": 0.3,
+    "max_tab": 5,
+    "hide_chrome": 1
+}
