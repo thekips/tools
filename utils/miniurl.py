@@ -1,17 +1,49 @@
 import os
 import requests
 
+cookies = {
+    'tinyUUID': 'eyJpdiI6InBINm14aUxCcnVyaVdSQVljSmFBdVE9PSIsInZhbHVlIjoiWnc5cWtnSVRaK2M4dE1kZ2QyWlhaTVJpelh0QW1yQ2hNank1em5FQmZPbVIzMUlrc1huRGVCc1g1a3p0bDNJaldXdW45REthUHdoYzZRL0dLTzYvbHY3d05VRTFNVjAyOXZ0OVZrWkNpeGM9IiwibWFjIjoiYTVjNzA5M2FlODE5OWM0MGJiYTk5MTYxNzQ5NjliZGM5NWJmMmQ0MGFhZjcwYjgxZjYyZGVlY2ZlMTZmZWU0MiIsInRhZyI6IiJ9',
+    'early-access': 'eyJpdiI6IkMzc29TakFwby9rd1lac2E1SlQ3N0E9PSIsInZhbHVlIjoiYkJkWHRGYmF3QVVQK01nTGJrT3E4NDFsTVJoUGlpOTBHZEtXcmdZMzg0Yjh0b3FHVWZ2anpaVmFMdldLRmJ6akJYWTY3bndtbkhZRGRyS0dwOExWQUJaUWtZdDMyNGFpSTZpQnRRcktHbEk9IiwibWFjIjoiNGM0YzFlODdlZWE1OGFkMjljN2MzYjZmZTc1OTdmZDExZDZiMGFjNzVlYmUxNDRjM2QyYzdmOGIwMGIzY2VjNyIsInRhZyI6IiJ9',
+    'XSRF-TOKEN': 'eyJpdiI6IlJTUXRDYkxmK2NSNWo4eGpaVm1oZkE9PSIsInZhbHVlIjoiMnFDcm9VYTR4V0loU1g4a2p1Q2lCTGQyL0EwUXVrQ0oyUUdmMnlPaHhlRFZySml3cG9jSks2d1dmL3M5NW9qb3dqd01OcmFXUTRuRUduSmhWeEVDKzJlQ3hyQXNOeUduOHhTZ2x3ZENBbzBhRmFjQys4M1NkdzUwN2RtQnMzQXciLCJtYWMiOiIzNTY0YWY0ZDI0YTE3NjlkODBlOGJmODQzNjI2N2ZiMWUyNTNlNGNjMTI3ZGJmODNhYjQ5OTMxZDY2ODI5YjNhIiwidGFnIjoiIn0%3D',
+    'tinyurl_session': 'eyJpdiI6IjhWcm5TZWJ2U2N1RDlXamZPTEk2TEE9PSIsInZhbHVlIjoiMFVzUmRFOFg3Y1NYL01XZzg5MnR2SlRSeFVmTFArcjhKV2hUcGExOTRuOWpPZ0RlcmJjNURuUEc4QlRKVTdwREN2NjZuVm96R2owWmhhZnlNZVdzY1k1dkRuZ0tHbHVGQnNSL0JOVVpja0Rob3FZclZuZk4rVUpXQXJwaVkrNEMiLCJtYWMiOiJlZjY4ZTIxNGNhNjRhYjQzOTg4YzFiZDFmM2U5ZTdkM2NjZWFjNWY1MTgyMjlmYTFkNTgzMTVlY2FmZmQ2ZTIyIiwidGFnIjoiIn0%3D',
+}
+
 headers = {
-    'x-xsrf-token': 'eyJpdiI6ImN6dFpaQlZFVTREYVlkT1oxYm4wY2c9PSIsInZhbHVlIjoiekU5VmZjcGFqM3RSNit3a1NHYjVMdFBSQXQyTDhxMWlZMXVnSzBlNHp4UWlXVmV1SXM5M3dHaHJQblYyTlhkTkZiNFRzNmt6QTI5XC9oUlIzcDRVaUhaK08yMkY4NDNoaU9QeDZtYUFPdk84dU9CMHkzblZPMTc2UWFNMGJ2MzJQIiwibWFjIjoiMDI2ZmE3NTA5NjU3NGJhZWEyNjhhNjMxMGVkMjAwMDViNTRkZTliMjU5ODAxN2ZhNWQxODk2YzM3MDM3OTZmMCJ9',
-    'content-type': 'application/json',
+    'authority': 'tinyurl.com',
+    'accept': '*/*',
+    'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+    # Already added when you pass json=
+    # 'content-type': 'application/json',
+    # Requests sorts cookies= alphabetically
+    # 'cookie': 'tinyUUID=eyJpdiI6InBINm14aUxCcnVyaVdSQVljSmFBdVE9PSIsInZhbHVlIjoiWnc5cWtnSVRaK2M4dE1kZ2QyWlhaTVJpelh0QW1yQ2hNank1em5FQmZPbVIzMUlrc1huRGVCc1g1a3p0bDNJaldXdW45REthUHdoYzZRL0dLTzYvbHY3d05VRTFNVjAyOXZ0OVZrWkNpeGM9IiwibWFjIjoiYTVjNzA5M2FlODE5OWM0MGJiYTk5MTYxNzQ5NjliZGM5NWJmMmQ0MGFhZjcwYjgxZjYyZGVlY2ZlMTZmZWU0MiIsInRhZyI6IiJ9; early-access=eyJpdiI6IkMzc29TakFwby9rd1lac2E1SlQ3N0E9PSIsInZhbHVlIjoiYkJkWHRGYmF3QVVQK01nTGJrT3E4NDFsTVJoUGlpOTBHZEtXcmdZMzg0Yjh0b3FHVWZ2anpaVmFMdldLRmJ6akJYWTY3bndtbkhZRGRyS0dwOExWQUJaUWtZdDMyNGFpSTZpQnRRcktHbEk9IiwibWFjIjoiNGM0YzFlODdlZWE1OGFkMjljN2MzYjZmZTc1OTdmZDExZDZiMGFjNzVlYmUxNDRjM2QyYzdmOGIwMGIzY2VjNyIsInRhZyI6IiJ9; XSRF-TOKEN=eyJpdiI6IlJTUXRDYkxmK2NSNWo4eGpaVm1oZkE9PSIsInZhbHVlIjoiMnFDcm9VYTR4V0loU1g4a2p1Q2lCTGQyL0EwUXVrQ0oyUUdmMnlPaHhlRFZySml3cG9jSks2d1dmL3M5NW9qb3dqd01OcmFXUTRuRUduSmhWeEVDKzJlQ3hyQXNOeUduOHhTZ2x3ZENBbzBhRmFjQys4M1NkdzUwN2RtQnMzQXciLCJtYWMiOiIzNTY0YWY0ZDI0YTE3NjlkODBlOGJmODQzNjI2N2ZiMWUyNTNlNGNjMTI3ZGJmODNhYjQ5OTMxZDY2ODI5YjNhIiwidGFnIjoiIn0%3D; tinyurl_session=eyJpdiI6IjhWcm5TZWJ2U2N1RDlXamZPTEk2TEE9PSIsInZhbHVlIjoiMFVzUmRFOFg3Y1NYL01XZzg5MnR2SlRSeFVmTFArcjhKV2hUcGExOTRuOWpPZ0RlcmJjNURuUEc4QlRKVTdwREN2NjZuVm96R2owWmhhZnlNZVdzY1k1dkRuZ0tHbHVGQnNSL0JOVVpja0Rob3FZclZuZk4rVUpXQXJwaVkrNEMiLCJtYWMiOiJlZjY4ZTIxNGNhNjRhYjQzOTg4YzFiZDFmM2U5ZTdkM2NjZWFjNWY1MTgyMjlmYTFkNTgzMTVlY2FmZmQ2ZTIyIiwidGFnIjoiIn0%3D',
+    'dnt': '1',
+    'origin': 'https://tinyurl.com',
+    'referer': 'https://tinyurl.com/app',
+    'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
     'x-requested-with': 'XMLHttpRequest',
-    'cookie': 'tinyUUID=eyJpdiI6InRtY015VmdSOXdWMGN4XC9wR25wTEJRPT0iLCJ2YWx1ZSI6IkNGTWlnWXpseXowdmVmZE81a0p0VU91V2FtZDlzZm9FdGhma2FvcEVKOXczTXlJbXlVdHVaa3pFdWRPUnNTc0J2amR5elpDa1RITEtaeUNuODNxQmNxQ3pQamNVd3Z4S3J1bHVYUEpYa2JnPSIsIm1hYyI6IjEzNTBmMWM0ODk3OTZmZjg1NTVlMjkyNjc1MDQ5NjliMDAzZDgyYjVhM2ZkYzBjM2QwMGM3MDZmYzYyNzZhNDUifQ%3D%3D; early-access=eyJpdiI6ImFjeSt2eGJ3RzJieVlnZVpcLzFzaUVBPT0iLCJ2YWx1ZSI6Ikt6VVBFOGpLU2VzN1FCOUhrendZOFdGeXp0U1ZoZG81c1FTRXBYOVZLSkxFUmJHWE1ZZE9IMmRcL2oxQmxEOGc3ZVJCSDdYejBQa3RtaEszajgyREEwYXVSWjFocVVEdlNPemF5cnZTdW1Scz0iLCJtYWMiOiJkODRjNGNhNjgxNGQyNzVlZjU3ZjkzMGY1NmJjNDM1MTNmZjg3ZGEyMGYyOWMwYTBkYWRlYTc3ZDMzZDg1Zjk0In0%3D; __rtgt_sid=kyg4gh6mlwrc3y; _pbjs_userid_consent_data=3524755945110770; _pubcid=1df5ff1d-b225-4aa9-84b8-65310a3f753f; __gads=ID=81fb394c5a3c34b8:T=1642268829:S=ALNI_MakXzkeqfe1BtYQg4fXd5UZY1y5mw; __stripe_mid=4134f72a-ed03-4c3a-afc8-dcbe470f9df4c64150; __stripe_sid=8077f275-3858-4241-9ee3-cd3ad915bce24d70b7; XSRF-TOKEN=eyJpdiI6ImN6dFpaQlZFVTREYVlkT1oxYm4wY2c9PSIsInZhbHVlIjoiekU5VmZjcGFqM3RSNit3a1NHYjVMdFBSQXQyTDhxMWlZMXVnSzBlNHp4UWlXVmV1SXM5M3dHaHJQblYyTlhkTkZiNFRzNmt6QTI5XC9oUlIzcDRVaUhaK08yMkY4NDNoaU9QeDZtYUFPdk84dU9CMHkzblZPMTc2UWFNMGJ2MzJQIiwibWFjIjoiMDI2ZmE3NTA5NjU3NGJhZWEyNjhhNjMxMGVkMjAwMDViNTRkZTliMjU5ODAxN2ZhNWQxODk2YzM3MDM3OTZmMCJ9; tinyurl_session=eyJpdiI6ImFEWFEyRlBBK2lSVkZnTXY2c1MrWHc9PSIsInZhbHVlIjoiQ0ZWd1wvcTJPcDFYbGxPVXZYRnI3dDIrZ3FXUis4ZlRueXlDUEZiSEJjZUVtUndabWh4SGo1TTdPcm9TeW5BVFhraEZUU3Nac2lMR3hlN0ZPWFBEK2l1bUJ2QlQ4TVVIcmh5XC9QazQ4QVRzNlJxNllINkFZWUJvWk8yMXZ0SThQbSIsIm1hYyI6ImE1YmQwZjc3ZDhhYzEzZDVkZDM1YjdlM2FiODgxNjlmMWE0ODEwMDQ4NTVlYTI1NDNjNWVmYWI4ZTgyYzQ1ZmMifQ%3D%3D',
+    'x-xsrf-token': 'eyJpdiI6IlJTUXRDYkxmK2NSNWo4eGpaVm1oZkE9PSIsInZhbHVlIjoiMnFDcm9VYTR4V0loU1g4a2p1Q2lCTGQyL0EwUXVrQ0oyUUdmMnlPaHhlRFZySml3cG9jSks2d1dmL3M5NW9qb3dqd01OcmFXUTRuRUduSmhWeEVDKzJlQ3hyQXNOeUduOHhTZ2x3ZENBbzBhRmFjQys4M1NkdzUwN2RtQnMzQXciLCJtYWMiOiIzNTY0YWY0ZDI0YTE3NjlkODBlOGJmODQzNjI2N2ZiMWUyNTNlNGNjMTI3ZGJmODNhYjQ5OTMxZDY2ODI5YjNhIiwidGFnIjoiIn0=',
 }
 
 url = input('Input the url: ')
-data = '{"url":"%s","domain":"tinyurl.com","alias":""}' % url
+json_data = {
+    'url': url,
+    'domain': 'tinyurl.com',
+    'alias': '',
+    'tags': [],
+    'errors': {
+        'errors': {},
+    },
+    'busy': True,
+    'successful': False,
+}
 
-response = requests.post('https://tinyurl.com/app/api/create', headers=headers, data=data)
+response = requests.post('https://tinyurl.com/app/api/create', cookies=cookies, headers=headers, json=json_data)
 res = response.json()['data'][0]['aliases'][0]['tiny_url']
 os.system('echo %s | clip' % res)
 print(res)

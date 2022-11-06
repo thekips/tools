@@ -1,47 +1,84 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import re
+from weakref import proxy
 import requests
+import sys
 import os
 from pixivpy3 import *
-import ctypes
 import platform
 
-SYSTEM = platform.system()
-headers = {
-    'referer': 'https://app-api.pixiv.net/'
-}
 
-def proxyStr():
-    if SYSTEM == 'Windows':
-        cmd = 'reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer'
-        with os.popen(cmd) as f:
-            res  = f.read()
-        proxy = 'http://' + re.sub(r'[^\d\.:]', '', res)
-    elif SYSTEM == 'Linux':
+def get_sys_proxy():
+    if SYSTEM == "Windows":
+        with os.popen(REG_PROXY) as f:
+            res = f.read()
+        proxy = "http://" + re.sub(r"[^\d\.:]", "", res)
+    elif SYSTEM == "Linux":
         pass
 
-    return proxy
-
-def proxyDic():
-    proxy = proxyStr()
-
-    if proxy == '':
+    if proxy == "":
         return None
     else:
-        return {'http': proxy, 'https': proxy}
+        return {"http": proxy, "https": proxy}
 
 
-def setWallPaper(pic_path):
-    if SYSTEM == 'Windows':
-        ctypes.windll.user32.SystemParametersInfoW(20, 0, pic_path, 0)
-    elif SYSTEM == 'Linux':
-        # use follow instruction to listen the result on terminal when changing your wallpaper and replace it.
-        # 'xfconf-query -c xfce4-desktop -p /backdrop -m'
-        command = 'xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitorHDMI-0/workspace0/last-image -s '
-        print(pic_path)
-        os.system(command + pic_path)
+def get_pic_url(url):
+    suffix = url[url.find("/img/") : url.rfind("_p0") + 3] + url[-4:]
+    url = "https://i.pximg.net/img-original" + suffix
 
+    return url
+
+
+def dl_pic(url, path_to_file, proxy):
+    if os.path.exists(path_to_file):
+        print("PASS")
+        return
+
+    headers = {"referer": "https://app-api.pixiv.net/"}
+    try:
+        pic = requests.get(url, headers=headers, proxies=proxy)
+        if pic:
+            with open(path_to_file, "wb") as f:
+                f.write(pic.content)
+    except:
+        dl_pic(url[:-4] + ".png", path_to_file, proxy)
+
+
+def dl_ranking(aapi, path, proxy, mode="week"):
+    json_result = aapi.illust_ranking(mode)
+    illusts = json_result.illusts
+
+    cnt = 0
+    while True:
+
+        for illust in illusts:
+            url = get_pic_url(illust.image_urls["large"])
+
+            path_to_file = (
+                path + url[url.rfind("/") + 1 : -4] + "#" + illust.title + ".jpg"
+            )
+
+            if os.path.exists(path_to_file):
+                print(illust.title, "PASS")
+                continue
+
+            print(cnt, illust.title, url)
+            dl_pic(url, path_to_file, proxy)
+
+            cnt += 1
+            if cnt == 100:
+                break
+
+        if cnt == 100:
+            break
+        next_qs = aapi.parse_qs(json_result.next_url)
+        json_result = aapi.illust_ranking(**next_qs)
+        illusts = json_result.illusts
+
+
+SYSTEM = platform.system()
+REG_PROXY = 'reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer'
 # get your refresh_token, and replace _REFRESH_TOKEN
 #  https://github.com/upbit/pixivpy/issues/158#issuecomment-778919084
 _REFRESH_TOKEN = "0zeYA-PllRYp1tfrsq_w3vHGU1rPy237JMf5oDt73c4"
@@ -49,60 +86,27 @@ _REFRESH_TOKEN = "0zeYA-PllRYp1tfrsq_w3vHGU1rPy237JMf5oDt73c4"
 # If a special network environment is meet, please configure requests as you need.
 # Otherwise, just keep it empty.
 _REQUESTS_KWARGS = {
-    'proxies': {
-        'https': proxyStr(),
+    "proxies": {
+        "https": get_sys_proxy().get("http"),
     },
     # 'verify': False,       # PAPI use https, an easy way is disable requests SSL verify
 }
 
-path = os.path.expanduser('~').replace('\\', '/') + '/Pictures/.wallpaper/'
-if not os.path.exists(path):
-    os.makedirs(path)
 
-def dlPic(url):
-    path_to_file = path + url[url.rfind('/') + 1 : ]
+def main(mode="week"):
+    path = os.path.expanduser("~") + "/Pictures/Pixiv/"
+    if not os.path.exists(path):
+        os.makedirs(path)
 
-    pic = requests.get(url, headers=headers, proxies=proxyDic())
-    if pic:
-        with open(path_to_file, 'wb') as f:
-            f.write(pic.content)
-        setWallPaper(path_to_file)
-        print('Change wallpaper success!')
-    else:
-        dlPic(url[:-4] + '.png')
-
-def getOri(url):
-    suffix = url[url.find('/img/') : url.rfind('_p0') + 3] + url[-4:]
-    url = 'https://i.pximg.net/img-original' + suffix
-
-    return url
-
-def appapi_ranking(aapi, mode='week'):
-    json_result = aapi.illust_ranking(mode)
-    index = 0
-    while True:
-        illust = json_result.illusts[index]
-        index += 1
-
-        url = getOri(illust.image_urls['large'])
-        pic_name = url[url.rfind('/') + 1 : ]
-        if illust.height < illust.width :
-            a = path + pic_name
-            b = a[:-4] + '.png'
-
-            if not (os.path.exists(a) or os.path.exists(b)):
-                break
-
-    print(illust.title, url)
-    dlPic(url)
-
-def main():
-    # app-api
+    # Create AppPixivAPI class
     aapi = AppPixivAPI(**_REQUESTS_KWARGS)
     aapi.auth(refresh_token=_REFRESH_TOKEN)
 
-    appapi_ranking(aapi, 'week')
+    proxy = get_sys_proxy()
+    dl_ranking(aapi, path, proxy, mode)
 
 
-if __name__ == '__main__':
+if len(sys.argv) >= 2:
+    main(sys.argv[1])
+else:
     main()
