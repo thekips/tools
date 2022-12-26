@@ -47,3 +47,4 @@ response = requests.post('https://tinyurl.com/app/api/create', cookies=cookies, 
 res = response.json()['data'][0]['aliases'][0]['tiny_url']
 os.system('echo %s | clip' % res)
 print(res)
+os.system('pause')

@@ -1,3 +1,4 @@
+import os
 weight = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
 table = ['1', '0', 'x', '9', '8', '7', '6', '5', '4', '3', '2']
 
@@ -11,3 +12,4 @@ for i, num in enumerate(id_num):
 
 hash_num = table[sum % 11]
 print('The hash num is: ', hash_num)
+os.system('pause')
