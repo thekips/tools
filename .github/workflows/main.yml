@@ -2,7 +2,8 @@ name: "zodgame"
 
 on:
   schedule:
-    - cron: "18 1 * * *"  # scheduled at 06:00 (UTC+8) everyday
+    - cron: "30 23 * * *"  # scheduled at 07:30 (UTC+8) everyday
+    - cron: "* */7 * * *"  # scheduled at every 7 hours
   workflow_dispatch:
 
 env:
@@ -30,11 +31,20 @@ jobs:
 
       - name: Random sleep
         if: github.event_name == 'schedule'
-        run: sleep $(shuf -i 10-300 -n 1)
+        run: sleep $(shuf -i 2-60 -n 1)
 
-      - name: Run sign
+      - name: Run zodgame
+        if: github.event.schedule == '30 23 * * *'
         run: |
+          echo "Run zodgame..."
           python -m pip install --upgrade pip
           pip install requests
-          ls -a
-          python3 ./zodgame/zodgame.py '${{ secrets.COOKIE }}'
+          python3 ./checkin/zodgame.py '${{ secrets.ZODGAME_COOKIE }}'
+
+      - name: Run tsdm
+        if: github.event.schedule == '* */7 * * *'
+        run: |
+          echo "Run tsdm..."
+          python -m pip install --upgrade pip
+          pip install requests parsel
+          python3 ./checkin/tsdm.py '${{ secrets.TSDM_COOKIE }}'
