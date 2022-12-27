@@ -34,7 +34,7 @@ jobs:
         run: sleep $(shuf -i 2-60 -n 1)
 
       - name: Run zodgame
-        if: github.event.schedule == '30 23 * * *' || github.event_name == 'schedule'
+        if: github.event.schedule == '30 23 * * *' || github.event_name != 'schedule'
         run: |
           echo "Run zodgame..."
           python -m pip install --upgrade pip
@@ -42,7 +42,7 @@ jobs:
           python3 ./checkin/zodgame.py '${{ secrets.ZODGAME_COOKIE }}'
 
       - name: Run tsdm
-        if: github.event.schedule == '* */7 * * *' || github.event_name == 'schedule'
+        if: github.event.schedule == '* */7 * * *' || github.event_name != 'schedule'
         run: |
           echo "Run tsdm..."
           python -m pip install --upgrade pip
