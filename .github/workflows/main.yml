@@ -3,7 +3,7 @@ name: "Auto Sign"
 on:
   schedule:
     - cron: "30 23 * * *"  # scheduled at 07:30 (UTC+8) everyday
-    - cron: "* */7 * * *"  # scheduled at every 7 hours
+    - cron: "0 */7 * * *"  # scheduled at every 7 hours
   workflow_dispatch:
 
 env:
