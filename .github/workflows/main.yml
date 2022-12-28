@@ -2,8 +2,8 @@ name: "Auto Sign"
 
 on:
   schedule:
-    - cron: "30 23 * * *"  # scheduled at 07:30 (UTC+8) everyday
-    - cron: "0 */7 * * *"  # scheduled at every 7 hours
+    - cron: '30 23 * * *'  # scheduled at 07:30 (UTC+8) everyday
+    - cron: '0 */7 * * *'  # scheduled at every 7 hours
   workflow_dispatch:
 
 env:
@@ -42,7 +42,7 @@ jobs:
           python3 ./checkin/zodgame.py '${{ secrets.ZODGAME_COOKIE }}'
 
       - name: Run tsdm
-        if: github.event.schedule == '* */7 * * *' || github.event_name != 'schedule'
+        if: github.event.schedule == '0 */7 * * *' || github.event_name != 'schedule'
         run: |
           echo "Run tsdm..."
           python -m pip install --upgrade pip
