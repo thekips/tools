@@ -5,11 +5,9 @@ import requests
 import hashlib
 import time
 import copy
-import logging
 import random
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+from checkin_logger import logger
 
 # API_URL
 LIKIE_URL = "http://c.tieba.baidu.com/c/f/forum/like"

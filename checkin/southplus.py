@@ -1,10 +1,16 @@
 import sys
+import re
 import requests
+
+from checkin_logger import logger
 
 URL = 'https://www.south-plus.net/plugin.php'
 
 cookies = sys.argv[1]
-print(cookies)
+
+def get_info(s):
+    return re.findall(r'(?<=confirm\s).*(?=\s)', s)[0]
+
 headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54',
     "cookie": cookies,
@@ -22,7 +28,7 @@ params = {
     'verify': 'f2807318',
 }
 response = session.get(URL, params=params)
-print(response.text)
+logger.info(get_info(response.text))
 
 #完成任务
 params = {
@@ -34,4 +40,4 @@ params = {
     'verify': 'f2807318',
 }
 response = session.get(URL, params=params)
-print(response.text)
+logger.info(get_info(response.text))

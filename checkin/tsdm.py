@@ -1,13 +1,10 @@
 import sys
-import logging
 import requests
 from parsel import Selector
 from urllib.parse import urljoin
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s: %(message)s"
-)
-logger = logging.getLogger(__name__)
+from checkin_logger import logger
+
 base_url = 'https://www.tsdm39.net/'
 
 cookies = sys.argv[1]
