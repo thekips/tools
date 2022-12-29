@@ -1,9 +1,14 @@
 import requests
 import re
 import sys
+import logging
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s: %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 cookie = sys.argv[1]
-print(cookie)
 
 # tgbot机器人配置,为空为不启用
 bottoken = ''
@@ -33,12 +38,12 @@ def get_user_info():
             # print(points_name,points_num)
             return s, formhash, username, points_name, points_num
         else:
-            print('未获取到数据,疑似cookie失效')
+            logger.info('未获取到数据,疑似cookie失效')
             tg_bot('未获取到数据,疑似cookie失效')
             exit()
     except Exception as error:
-        print(error)
-        print("zodgame签到出错")
+        logger.error(error)
+        logger.error("zodgame签到出错")
 
 
 def zodgame():
@@ -54,22 +59,22 @@ def zodgame():
         page_text = r.text.encode(r.encoding).decode(r.apparent_encoding)
         if "已被系统拒绝" in page_text:
             tg_bot('zodgame的cookie已过期')
-            print("zodgame的cookie已过期")
+            logger.info("zodgame的cookie已过期")
         elif "恭喜" in page_text:
             s, formhash, username, points_name, points_num = get_user_info()
-            print('zodgame签到成功!\n用户:{}\n{}{}'.format(
+            logger.info('zodgame签到成功!\n用户:{}\n{}{}'.format(
                 username, points_name, points_num))
             tg_bot('zodgame签到成功!\n用户:{}\n{}{}'.format(
                 username, points_name, points_num))
         elif '已经签到' in page_text:
             tg_bot('zodgame已经签到了')
-            print('zodgame已经签到了')
+            logger.info('zodgame已经签到了')
         else:
-            print(page_text)
+            logger.error(page_text)
             tg_bot('zodgame签到出错')
     except Exception as error:
-        print(error)
-        print("zodgame签到出错")
+        logger.error(error)
+        logger.error("zodgame签到出错")
 
 
 def tg_bot(text):
@@ -86,4 +91,4 @@ if __name__ == '__main__':
     if cookie:
         zodgame()
     else:
-        print('您未配置cookie')
+        logger.error('您未配置cookie')
