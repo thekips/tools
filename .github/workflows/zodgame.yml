@@ -1,0 +1,36 @@
+name: "Auto Sign"
+
+on:
+  workflow_dispatch:
+
+env:
+  # auto merge from y1ndan/genshin-impact-helper, default: false
+  ALLOW_MERGE: 'false'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # if: github.ref == 'refs/heads/master'
+
+    steps:
+
+      - name: Checkout master
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: main
+
+
+      - name: Set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Run zodgame
+        if: github.event.schedule == '30 16 * * *' || github.event_name != 'schedule'
+        run: |
+          echo "Run zodgame..."
+          python -m pip install --upgrade pip
+          pip install requests
+          python3 ./checkin/zodgame.py '${{ secrets.ZODGAME_COOKIE }}'
+          echo "Finished zodgame..."
