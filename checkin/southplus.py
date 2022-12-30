@@ -9,7 +9,9 @@ URL = 'https://www.south-plus.net/plugin.php'
 cookies = sys.argv[1]
 
 def get_info(s):
-    return re.findall(r'(?<=confirm\s).*(?=\s)', s)[0]
+    res = re.findall(r'(?<=confirm\s).*(?=\s)', s)
+
+    return res[0] if len(res) >= 1 else s
 
 headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54',
