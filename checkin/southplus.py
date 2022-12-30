@@ -9,7 +9,7 @@ URL = 'https://www.south-plus.net/plugin.php'
 cookies = sys.argv[1]
 
 def get_info(s):
-    res = re.findall(r'(?<=confirm\s).*(?=\s)', s)
+    res = re.findall(r'(?<=CDATA).*(?=\])', s)
 
     return res[0] if len(res) >= 1 else s
 
