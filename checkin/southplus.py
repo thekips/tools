@@ -20,7 +20,8 @@ headers = {
 session = requests.session()
 session.headers = headers
 
-#领取奖励
+# 日常任务
+# 领取奖励
 params = {
     'H_name': 'tasks',
     'action': 'ajax',
@@ -31,14 +32,38 @@ params = {
 }
 response = session.get(URL, params=params)
 logger.info(get_info(response.text))
-
-#完成任务
+# 完成任务
 params = {
     'H_name': 'tasks',
     'action': 'ajax',
     'actions': 'job2',
     'cid': '15',
     'nowtime': '1672152113906',
+    'verify': 'f2807318',
+}
+response = session.get(URL, params=params)
+logger.info(get_info(response.text))
+
+
+# 新年红包
+# 领取任务
+params = {
+    'H_name': 'tasks',
+    'action': 'ajax',
+    'actions': 'job',
+    'cid': '19',
+    'nowtime': '1672570369699',
+    'verify': 'f2807318',
+}
+response = session.get(URL, params=params)
+logger.info(get_info(response.text))
+# 领取奖励
+params = {
+    'H_name': 'tasks',
+    'action': 'ajax',
+    'actions': 'job2',
+    'cid': '19',
+    'nowtime': '1672570470977',
     'verify': 'f2807318',
 }
 response = session.get(URL, params=params)

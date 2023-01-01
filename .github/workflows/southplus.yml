@@ -25,10 +25,10 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Run zodgame
+      - name: Run southplus
         run: |
-          echo "Run zodgame..."
+          echo "Run southplus..."
           python -m pip install --upgrade pip
           pip install requests
-          python3 ./checkin/zodgame.py '${{ secrets.ZODGAME_COOKIE }}'
-          echo "Finished zodgame..."
+          python3 ./checkin/southplus.py '${{ secrets.SOUTHPLUS_COOKIE }}'
+          
