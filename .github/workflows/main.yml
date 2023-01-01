@@ -56,6 +56,14 @@ jobs:
           pip install requests
           python3 ./checkin/tieba.py '${{ secrets.TIEBA_COOKIE }}'
 
+      - name: Run smzdm
+        if: github.event.schedule == '30 16 * * *' || github.event_name != 'schedule'
+        run: |
+          echo "Run smzdm..."
+          python -m pip install --upgrade pip
+          pip install requests
+          python3 ./checkin/smzdm.py '${{ secrets.SMZDM_COOKIE }}'
+
       - name: Run tsdm
         if: github.event.schedule == '0 */7 * * *' || github.event_name != 'schedule'
         run: |
