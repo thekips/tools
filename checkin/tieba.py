@@ -30,6 +30,7 @@ SIGN_DATA = {
 
 # VARIABLE NAME
 COOKIE = "Cookie"
+# TIEBA_COOKIE
 BDUSS = sys.argv[1]
 EQUAL = r'='
 EMPTY_STR = r''

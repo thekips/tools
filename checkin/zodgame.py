@@ -3,6 +3,7 @@ import re
 import sys
 from checkin_logger import logger
 
+# ZODGAME_COOKIE
 cookie = sys.argv[1]
 
 # tgbot机器人配置,为空为不启用

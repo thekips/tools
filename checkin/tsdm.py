@@ -7,6 +7,7 @@ from checkin_logger import logger
 
 base_url = 'https://www.tsdm39.net/'
 
+# TSDM_COOKIE
 cookies = sys.argv[1]
 print(cookies)
 

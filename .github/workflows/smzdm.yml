@@ -1,4 +1,5 @@
-name: "southplus"
+
+name: "smzdm"
 
 on:
   workflow_dispatch:
@@ -25,10 +26,10 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Run southplus
+      - name: Run smzdm
         run: |
-          echo "Run southplus..."
+          echo "Run smzdm..."
           python -m pip install --upgrade pip
           pip install requests
-          python3 ./checkin/southplus.py '${{ secrets.SOUTHPLUS_COOKIE }}'
+          python3 ./checkin/smzdm.py '${{ secrets.SMZDM_COOKIE }}'
           

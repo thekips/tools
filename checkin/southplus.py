@@ -6,6 +6,7 @@ from checkin_logger import logger
 
 URL = 'https://www.south-plus.net/plugin.php'
 
+#SOUTHPLUS_COOKIE
 cookies = sys.argv[1]
 
 def get_info(s):
