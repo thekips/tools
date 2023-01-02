@@ -4,8 +4,8 @@ import sys
 import time
 from telethon import TelegramClient, events, sync
 
-api_id = [int(sys.argv[1])]	#输入api_id，一个账号一项
-api_hash = [sys.argv[2]]	#输入api_hash，一个账号一项
+api_id = [26449713]	#输入api_id，一个账号一项
+api_hash = [sys.argv[1]]	#输入api_hash，一个账号一项
 
 session_name = api_id[:]
 for num in range(len(api_id)):
