@@ -2,7 +2,7 @@ name: "Auto Sign"
 
 on:
   schedule:
-    - cron: '30 16 * * *'  # scheduled at 07:30 (UTC+8) everyday
+    - cron: '00 23 * * *'  # scheduled at 07:30 (UTC+8) everyday
     - cron: '0 */7 * * *'  # scheduled at every 7 hours
   workflow_dispatch:
 
@@ -33,7 +33,7 @@ jobs:
         run: sleep $(shuf -i 2-60 -n 1)
 
       - name: Run zodgame
-        if: github.event.schedule == '30 16 * * *' || github.event_name != 'schedule'
+        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
         run: |
           echo "Run zodgame..."
           python -m pip install --upgrade pip
@@ -41,28 +41,30 @@ jobs:
           python3 ./checkin/zodgame.py '${{ secrets.ZODGAME_COOKIE }}'
           
       - name: Run southplus
-        if: github.event.schedule == '30 16 * * *' || github.event_name != 'schedule'
+        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
         run: |
           echo "Run southplus..."
           python -m pip install --upgrade pip
           pip install requests
           python3 ./checkin/southplus.py '${{ secrets.SOUTHPLUS_COOKIE }}'
+      
+      - name: Run telegram
+        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
+        run: |
+          echo "Run telegram..."
+          python -m pip install --upgrade pip
+          pip install telethon
+          cd ./checkin/telegram
+          python telegram.py '${{ secrets.TELEGRAM_API_HASH }}'
+          cd -
           
       - name: Run tieba
-        if: github.event.schedule == '30 16 * * *' || github.event_name != 'schedule'
+        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
         run: |
           echo "Run tieba..."
           python -m pip install --upgrade pip
           pip install requests
           python3 ./checkin/tieba.py '${{ secrets.TIEBA_COOKIE }}'
-
-      - name: Run smzdm
-        if: github.event.schedule == '30 16 * * *' || github.event_name != 'schedule'
-        run: |
-          echo "Run smzdm..."
-          python -m pip install --upgrade pip
-          pip install requests
-          python3 ./checkin/smzdm.py '${{ secrets.SMZDM_COOKIE }}'
 
       - name: Run tsdm
         if: github.event.schedule == '0 */7 * * *' || github.event_name != 'schedule'
@@ -71,3 +73,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests parsel
           python3 ./checkin/tsdm.py '${{ secrets.TSDM_COOKIE }}'
+
+      - name: Run smzdm
+        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
+        run: |
+          echo "Run smzdm..."
+          python -m pip install --upgrade pip
+          pip install requests
+          python3 ./checkin/smzdm.py '${{ secrets.SMZDM_COOKIE }}'
