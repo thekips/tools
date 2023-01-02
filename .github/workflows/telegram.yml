@@ -31,6 +31,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install telethon
           cd ./checkin/telegram
-          python telegram.py
+          python telegram.py '${{ secrets.TELEGRAM_API_HASH }}'
           cd -
           echo "Finished telegram..."
