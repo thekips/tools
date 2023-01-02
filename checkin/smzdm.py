@@ -28,6 +28,7 @@ def req(url):
     res = session.get(url)
     if res.status_code == 200:
         data = json.loads(res.text)
+        print('data is:', data)
         return data
 
 
@@ -37,6 +38,6 @@ if data['checkin']['has_checkin']:
     logger.info(info)
 else:
     checkin = req(checkin_url)['data']
-    logger.info(checkin)
-    info = '%s 目前积分：%s，增加积分：%s，经验值：%s，金币：%s，威望：%s，等级：%s' % (data['nickname'], checkin['point'], checkin['add_point'], checkin['exp'], checkin['gold'], checkin['prestige'], checkin['rank'])
-    logger.info(info)
+    if checkin != []: 
+        info = '%s 目前积分：%s，增加积分：%s，经验值：%s，金币：%s，威望：%s，等级：%s' % (data['nickname'], checkin['point'], checkin['add_point'], checkin['exp'], checkin['gold'], checkin['prestige'], checkin['rank'])
+        logger.info(info)

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
 import time
 from telethon import TelegramClient, events, sync
 
-api_id = [26449713]	#输入api_id，一个账号一项
-api_hash = ['0891beed56aa722c2fb1650fa7788aea']	#输入api_hash，一个账号一项
+api_id = [int(sys.argv[1])]	#输入api_id，一个账号一项
+api_hash = [sys.argv[2]]	#输入api_hash，一个账号一项
 
 session_name = api_id[:]
 for num in range(len(api_id)):
