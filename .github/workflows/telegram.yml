@@ -1,0 +1,34 @@
+name: "telegram"
+
+on:
+  workflow_dispatch:
+
+env:
+  ALLOW_MERGE: 'false'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # if: github.ref == 'refs/heads/master'
+
+    steps:
+
+      - name: Checkout master
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: main
+
+
+      - name: Set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Run telegram
+        run: |
+          echo "Run telegram..."
+          python -m pip install --upgrade pip
+          pip install telethon
+          cd ./checkin/telegram/telegram.py
+          echo "Finished telegram..."
