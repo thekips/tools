@@ -47,6 +47,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
           python3 ./checkin/southplus.py '${{ secrets.SOUTHPLUS_COOKIE }}'
+
+      - name: Run feiyue
+        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
+        run: |
+          echo "Run feiyue..."
+          python -m pip install --upgrade pip
+          pip install requests
+          python3 ./checkin/feiyue.py '${{ secrets.FEIYUE_COOKIE }}'
       
       - name: Run telegram
         if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
