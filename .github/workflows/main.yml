@@ -53,7 +53,7 @@ jobs:
         run: |
           echo "Run feiyue..."
           python -m pip install --upgrade pip
-          pip install requests
+          pip install requests parsel
           python3 ./checkin/feiyue.py '${{ secrets.FEIYUE_COOKIE }}'
       
       - name: Run telegram
