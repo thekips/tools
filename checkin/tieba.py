@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 import os
 import sys
+import re
 import requests
 import hashlib
 import time
@@ -14,12 +15,6 @@ LIKIE_URL = "http://c.tieba.baidu.com/c/f/forum/like"
 TBS_URL = "http://tieba.baidu.com/dc/common/tbs"
 SIGN_URL = "http://c.tieba.baidu.com/c/c/forum/sign"
 
-ENV = os.environ
-
-HEADERS = {
-    'Host': 'tieba.baidu.com',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
-}
 SIGN_DATA = {
     '_client_type': '2',
     '_client_version': '9.7.8.0',
@@ -28,42 +23,41 @@ SIGN_DATA = {
     "net_type": "1",
 }
 
-# VARIABLE NAME
-COOKIE = "Cookie"
-# TIEBA_COOKIE
-BDUSS = sys.argv[1]
 EQUAL = r'='
 EMPTY_STR = r''
-TBS = 'tbs'
-PAGE_NO = 'page_no'
-ONE = '1'
-TIMESTAMP = "timestamp"
-DATA = 'data'
-FID = 'fid'
 SIGN_KEY = 'tiebaclient!!!'
 UTF8 = "utf-8"
-SIGN = "sign"
-KW = "kw"
 
+cookies = sys.argv[1]
+headers = {
+    'Cookie': cookies,
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.76',
+}
 s = requests.Session()
+s.headers = headers
+
+try:
+    bduss = re.findall(r'(?<=BDUSS\=).*?(?=\;)',cookies)[0]
+except:
+    logger.error('ERROR COOKIES...')
 
 
-def get_tbs(bduss):
-    logger.info("获取tbs开始")
-    headers = copy.copy(HEADERS)
-    headers.update({COOKIE: EMPTY_STR.join([BDUSS, EQUAL, bduss])})
+def get_tbs():
+    logger.info("获取tbs开始...")
     try:
-        tbs = s.get(url=TBS_URL, headers=headers, timeout=5).json()[TBS]
+        tbs = s.get(url=TBS_URL, timeout=5).json()['tbs']
     except Exception as e:
         logger.error("获取tbs出错" + e)
         logger.info("重新获取tbs开始")
-        tbs = s.get(url=TBS_URL, headers=headers, timeout=5).json()[TBS]
+        tbs = s.get(url=TBS_URL, timeout=5).json()['tbs']
+
+    logger.info('tbs:' + tbs)
     logger.info("获取tbs结束")
     return tbs
 
 
 def get_favorite(bduss):
-    logger.info("获取关注的贴吧开始")
+    logger.info("获取关注的贴吧开始...")
     # 客户端关注的贴吧
     returnData = {}
     i = 1
@@ -156,30 +150,28 @@ def encodeData(data):
     for i in sorted(keys):
         s += i + EQUAL + str(data[i])
     sign = hashlib.md5((s + SIGN_KEY).encode(UTF8)).hexdigest().upper()
-    data.update({SIGN: str(sign)})
+    data.update({'sign': str(sign)})
     return data
 
 
 def client_sign(bduss, tbs, fid, kw):
     # 客户端签到
-    logger.info("开始签到贴吧：" + kw)
     data = copy.copy(SIGN_DATA)
-    data.update({BDUSS: bduss, FID: fid, KW: kw, TBS: tbs, TIMESTAMP: str(int(time.time()))})
+    data.update({'BDUSS': bduss, 'fid': fid, 'kw': kw, 'tbs': tbs, 'timestamp': str(int(time.time()))})
     data = encodeData(data)
     res = s.post(url=SIGN_URL, data=data, timeout=5).json()
     return res
 
 def main():
-    b = BDUSS.split('#')
-    for n, i in enumerate(b):
-        logger.info("开始签到第" + str(n) + "个用户" + i)
-        tbs = get_tbs(i)
-        favorites = get_favorite(i)
-        for j in favorites:
-            time.sleep(random.randint(1,5))
-            client_sign(i, tbs, j["id"], j["name"])
-        logger.info("完成第" + str(n) + "个用户签到")
-    logger.info("所有用户签到结束")
+    logger.info("开始签到...")
+    tbs = get_tbs()
+    favorites = get_favorite(bduss)
+    length = len(favorites)
+    for index, fav in enumerate(favorites):
+        logger.info("[%d/%d] " % (index+1, length) + "正在签到贴吧：" + fav["name"])
+        time.sleep(random.randint(1,5))
+        logger.info(client_sign(bduss, tbs, fav["id"], fav["name"]))
+    logger.info("签到完成")
 
 
 if __name__ == '__main__':
