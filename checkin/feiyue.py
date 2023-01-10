@@ -6,13 +6,12 @@ from checkin_logger import logger
 from parsel import Selector
 
 cookies = sys.argv[1]
-
 GAME_URL = 'https://bbs.kfpromax.com/kf_fw_ig_index.php'
 BATTLE_URL = 'https://bbs.kfpromax.com/kf_fw_ig_intel.php'
 
 headers = {
-    'referer': GAME_URL,
     'cookie': cookies,
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.76',
 }
 session = requests.session()
 session.headers = headers
@@ -22,12 +21,13 @@ if response.status_code == 200:
     safeid = re.findall(r'(?<=safeid=).*(?=\")', response.text)
     if len(safeid) > 0:
         safeid = safeid[0]
+        logger.info('safeid is: ', safeid)
     else:
-        logger.error('Can\'t find safeid...')
-        exit
+        logger.error('Process end, Can\'t find safeid...')
+        sys.exit()
 else:
     logger.error(response.status_code)
-    exit
+    sys.exit()
 
 data = {
     'safeid': safeid,
