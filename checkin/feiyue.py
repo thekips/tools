@@ -5,7 +5,8 @@ import requests
 from checkin_logger import logger
 from parsel import Selector
 
-cookies = sys.argv[1]
+# cookies = sys.argv[1]
+EXP_URL = 'https://bbs.kfpromax.com/kf_growup.php?ok=3&safeid=%s'
 GAME_URL = 'https://bbs.kfpromax.com/kf_fw_ig_index.php'
 BATTLE_URL = 'https://bbs.kfpromax.com/kf_fw_ig_intel.php'
 
@@ -21,7 +22,7 @@ if response.status_code == 200:
     safeid = re.findall(r'(?<=safeid=).*(?=\")', response.text)
     if len(safeid) > 0:
         safeid = safeid[0]
-        logger.info('safeid is: ', safeid)
+        logger.info('safeid is: %s' % safeid)
     else:
         logger.error('Process end, Can\'t find safeid...')
         sys.exit()
@@ -29,10 +30,18 @@ else:
     logger.error(response.status_code)
     sys.exit()
 
+# Checkin
+data = {
+    'safeid': safeid,
+    'ok': '3',
+}
+response = session.get(EXP_URL % safeid)
+logger.info('Check End...')
+
+# Game
 data = {
     'safeid': safeid,
 }
-
 while True:
     response = session.post(BATTLE_URL, data=data)
 
