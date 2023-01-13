@@ -5,7 +5,7 @@ import requests
 from checkin_logger import logger
 from parsel import Selector
 
-cookies = sys.argv[1]
+cookies = sys.argv[0]
 EXP_URL = 'https://bbs.kfpromax.com/kf_growup.php?ok=3&safeid=%s'
 GAME_URL = 'https://bbs.kfpromax.com/kf_fw_ig_index.php'
 BATTLE_URL = 'https://bbs.kfpromax.com/kf_fw_ig_intel.php'
@@ -43,6 +43,7 @@ data = {
     'safeid': safeid,
 }
 while True:
+    print(session.headers)
     response = session.post(BATTLE_URL, data=data)
 
     if response.text == 'no':
