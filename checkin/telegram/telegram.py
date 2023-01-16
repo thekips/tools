@@ -44,4 +44,4 @@ for i in range(4):
         
     client.send_message('@yellow_gif_bot', message=info[1])
     time.sleep(2)
-    client.send_read_acknowledge("@fooandfriends_bot")	#将机器人回应设为已读
+    client.send_read_acknowledge("@yellow_gif_bot")	#将机器人回应设为已读
