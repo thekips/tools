@@ -31,13 +31,16 @@ else:
     logger.info('ERR, NO MESSAGE..')
 
 # Send to yellow_gif_bot
-for i in range(3):
+for i in range(4):
     info = client.get_messages("@yellow_gif_bot", 2) #获取消息
     
-    if len(info) >= 0:
-        logger.info(info[0].message)
-    else:
-        logger.info('ERR, NO MESSAGE..')
+    if i != 0:
+        if len(info) >= 0:
+            logger.info(info[0].message)
+        else:
+            logger.info('ERR, NO MESSAGE..')
+    elif i >= 3:
+        break
         
     client.send_message('@yellow_gif_bot', message=info[1])
     time.sleep(2)
