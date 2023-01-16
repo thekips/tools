@@ -25,13 +25,13 @@ def get_user_info():
         user_r = s.get(url=user_url, headers=headers)
         user_page = user_r.text.encode(
             user_r.encoding).decode(user_r.apparent_encoding)
-        # print(user_page)
+        # logger.info(user_page)
         user_info_re = '<input type="hidden" name="formhash" value="(.*?)" />.*title="访问我的空间">(.*?)</a>.*</ul><ul class="creditl mtm bbda cl"><li class="xi1 cl"><em>.(.*?).</em>(.*?).&nbsp;'
         user_info = re.findall(user_info_re, user_page, re.S)
-        # print(user_info)
+        # logger.info(user_info)
         if len(user_info) > 0:
             formhash, username, points_name, points_num = user_info[0]
-            # print(points_name,points_num)
+            # logger.info(points_name,points_num)
             return s, formhash, username, points_name, points_num
         else:
             logger.info('未获取到数据,疑似cookie失效')
@@ -44,7 +44,7 @@ def get_user_info():
 
 def zodgame():
     s, formhash, username, points_name, points_num = get_user_info()
-    # print('用户:{}\n{}{}'.format(username,points_name, points_num))
+    # logger.info('用户:{}\n{}{}'.format(username,points_name, points_num))
     url = 'https://zodgame.xyz/plugin.php?id=dsu_paulsign:sign&operation=qiandao&infloat=1&inajax=1'
     data = {
         'formhash': formhash,

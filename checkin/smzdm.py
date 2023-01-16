@@ -28,7 +28,7 @@ def req(url):
     res = session.get(url)
     if res.status_code == 200:
         data = json.loads(res.text)
-        print('data is:', data)
+        logger.info('data is:', data)
         return data
 
 

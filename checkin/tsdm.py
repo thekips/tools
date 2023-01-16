@@ -9,7 +9,6 @@ base_url = 'https://www.tsdm39.net/'
 
 # TSDM_COOKIE
 cookies = sys.argv[1]
-print(cookies)
 
 def tsdm_login():
     headers = {
@@ -17,11 +16,10 @@ def tsdm_login():
                   'Chrome/88.0.4324.146 Safari/537.36 ',
         "Cookie": cookies,
     }
-    print(cookies)
     login_url = urljoin(base_url, "forum.php")
     session = requests.Session()
     session.headers = headers
-    print(login_url)
+    
     login_response = session.get(login_url)
     selector = Selector(text=login_response.text)
     if selector.css("#ls_username") and selector.css("#ls_password"):

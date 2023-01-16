@@ -43,7 +43,7 @@ data = {
     'safeid': safeid,
 }
 while True:
-    print(session.headers)
+    logger.info(session.headers)
     response = session.post(BATTLE_URL, data=data)
 
     if response.text == 'no':
