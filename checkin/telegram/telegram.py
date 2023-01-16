@@ -3,7 +3,13 @@ import os
 import sys
 import time
 from telethon import TelegramClient, events, sync
-from ..checkin_logger import logger
+
+import logging
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s: %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 api_id = 26449713
 api_hash = sys.argv[0]
