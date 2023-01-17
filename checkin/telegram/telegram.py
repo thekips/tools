@@ -12,7 +12,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 api_id = 26449713
-api_hash = sys.argv[0]
+api_hash = sys.argv[1]
 
 session_name = "id_" + str(api_id)
 # logger.info(session_name, api_id, api_hash)
