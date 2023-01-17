@@ -16,6 +16,7 @@ headers = {
 }
 session = requests.session()
 session.headers = headers
+logger.info(headers)
 
 response = session.get(GAME_URL)
 if response.status_code == 200:
