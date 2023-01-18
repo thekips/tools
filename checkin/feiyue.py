@@ -12,7 +12,7 @@ BATTLE_URL = 'https://bbs.kfpromax.com/kf_fw_ig_intel.php'
 
 headers = {
     'cookie': cookies,
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.52',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.55',
 }
 session = requests.session()
 session.headers = headers
