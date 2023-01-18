@@ -2,21 +2,36 @@ import re
 import time
 import sys
 import requests
+import random
 from checkin_logger import logger
 from parsel import Selector
 
 cookies = sys.argv[1]
+  
 EXP_URL = 'https://bbs.kfpromax.com/kf_growup.php?ok=3&safeid=%s'
 GAME_URL = 'https://bbs.kfpromax.com/kf_fw_ig_index.php'
 BATTLE_URL = 'https://bbs.kfpromax.com/kf_fw_ig_intel.php'
 
 headers = {
-    'cookie': cookies,
+    'authority': 'bbs.kfpromax.com',
+    'accept': '*/*',
+    'accept-language': 'en,zh-CN;q=0.9,zh;q=0.8,en-GB;q=0.7,en-US;q=0.6,zh-TW;q=0.5',
+    'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'cookie': cookies, 
+    'origin': 'https://bbs.kfpromax.com',
+    'referer': 'https://bbs.kfpromax.com/kf_fw_ig_index.php',
+    'sec-ch-ua': '"Not_A Brand";v="99", "Microsoft Edge";v="109", "Chromium";v="109"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.55',
+    'x-requested-with': 'XMLHttpRequest',
 }
 session = requests.session()
 session.headers = headers
-logger.info(headers)
+# logger.info(headers)
 
 response = session.get(GAME_URL)
 if response.status_code == 200:
@@ -53,4 +68,4 @@ while True:
         selector = Selector(response.text)
         info = selector.xpath('//text()').getall()
         logger.info(info)
-        time.sleep(1)
+        time.sleep(random.random() + 1)
