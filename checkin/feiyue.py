@@ -6,10 +6,15 @@ import random
 from checkin_logger import logger
 from parsel import Selector
 
-  
+
+LOGIN_URL = 'https://bbs.kfpromax.com/login.php'
 EXP_URL = 'https://bbs.kfpromax.com/kf_growup.php?ok=3&safeid=%s'
 GAME_URL = 'https://bbs.kfpromax.com/kf_fw_ig_index.php'
 BATTLE_URL = 'https://bbs.kfpromax.com/kf_fw_ig_intel.php'
+
+def get_text(response):
+    selector = Selector(response.text)
+    return selector.xpath('//text()').getall()
 
 user = 'xlrt'
 passwd = sys.argv[1]
@@ -27,7 +32,7 @@ session.headers = headers
 
 # Login
 data = 'forward=&step=2&lgt=1&hideid=0&cktime=31536000&pwuser={}&pwpwd={}'.format(user, passwd)
-response = session.post('https://bbs.kfpromax.com/login.php', headers=headers, data=data)
+response = session.post(LOGIN_URL, headers=headers, data=data)
 
 
 # Verify if login is success
@@ -67,6 +72,12 @@ while True:
         logger.info('%s, 今日已死亡，请明日再来...' % response.text)
         break
     else:
-        selector = Selector(response.text)
-        info = selector.xpath('//text()').getall()
-        logger.info(info)
+        logger.info(get_text(response))
+
+# Logout
+params = {
+    'action': 'quit',
+    'verify': safeid,
+}
+response = session.get(LOGIN_URL, params=params)
+logger.info(get_text(response))
