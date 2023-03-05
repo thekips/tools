@@ -56,14 +56,6 @@ jobs:
           pip install requests parsel
           python3 ./checkin/feiyue.py '${{ secrets.FEIYUE_COOKIE }}'
           
-      - name: Run tieba
-        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
-        run: |
-          echo "Run tieba..."
-          python -m pip install --upgrade pip
-          pip install requests
-          python3 ./checkin/tieba.py '${{ secrets.TIEBA_COOKIE }}'
-
       - name: Run tsdm
         if: github.event.schedule == '0 */7 * * *' || github.event_name != 'schedule'
         run: |
@@ -72,14 +64,6 @@ jobs:
           pip install requests parsel
           python3 ./checkin/tsdm.py '${{ secrets.TSDM_COOKIE }}'
 
-      - name: Run smzdm
-        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
-        run: |
-          echo "Run smzdm..."
-          python -m pip install --upgrade pip
-          pip install requests
-          python3 ./checkin/smzdm.py '${{ secrets.SMZDM_COOKIE }}'
-          
       - name: Run telegram
         if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
         run: |
@@ -89,3 +73,20 @@ jobs:
           cd ./checkin/telegram
           python telegram.py '${{ secrets.TELEGRAM_API_HASH }}'
           cd -
+
+      - name: Run tieba
+        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
+        run: |
+          echo "Run tieba..."
+          python -m pip install --upgrade pip
+          pip install requests
+          python3 ./checkin/tieba.py '${{ secrets.TIEBA_COOKIE }}'
+
+      - name: Run smzdm
+        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
+        run: |
+          echo "Run smzdm..."
+          python -m pip install --upgrade pip
+          pip install requests
+          python3 ./checkin/smzdm.py '${{ secrets.SMZDM_COOKIE }}'
+          

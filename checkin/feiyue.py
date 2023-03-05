@@ -1,3 +1,4 @@
+#%%
 import re
 import time
 import sys
@@ -7,7 +8,6 @@ from checkin_logger import logger
 from parsel import Selector
 
 
-LOGIN_URL = 'https://bbs.kfpromax.com/login.php'
 EXP_URL = 'https://bbs.kfpromax.com/kf_growup.php?ok=3&safeid=%s'
 GAME_URL = 'https://bbs.kfpromax.com/kf_fw_ig_index.php'
 BATTLE_URL = 'https://bbs.kfpromax.com/kf_fw_ig_intel.php'
@@ -16,26 +16,19 @@ def get_text(response):
     selector = Selector(response.text)
     return selector.xpath('//text()').getall()
 
-user = 'xlrt'
-passwd = sys.argv[1]
+cookies = sys.argv[1]
 
 # Create session
 headers = {
-    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    'content-type': 'application/x-www-form-urlencoded',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.55',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.63',
+    'cookie': cookies,
 }
 session = requests.session()
 session.headers = headers
 # logger.info(headers)
 
 
-# Login
-data = 'forward=&step=2&lgt=1&hideid=0&cktime=31536000&pwuser={}&pwpwd={}'.format(user, passwd)
-response = session.post(LOGIN_URL, headers=headers, data=data)
-
-
-# Verify if login is success
+# Verify if cookie is valid.
 response = session.get(GAME_URL)
 if response.status_code == 200:
     safeid = re.findall(r'(?<=safeid=).*(?=\")', response.text)
@@ -73,11 +66,3 @@ while True:
         break
     else:
         logger.info(get_text(response))
-
-# Logout
-params = {
-    'action': 'quit',
-    'verify': safeid,
-}
-response = session.get(LOGIN_URL, params=params)
-logger.info(get_text(response))
