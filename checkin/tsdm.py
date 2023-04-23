@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 
 from checkin_logger import logger
 
-base_url = 'https://www.tsdm39.net/'
+base_url = 'https://www.tsdm39.com/'
 
 # TSDM_COOKIE
 cookies = sys.argv[1]
