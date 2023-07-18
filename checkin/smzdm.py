@@ -3,6 +3,7 @@ import re
 import time
 import requests
 import hashlib
+import sys
 import prettytable as pt
 
 from checkin_logger import logger
