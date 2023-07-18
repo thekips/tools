@@ -1,0 +1,35 @@
+
+name: "tsdm"
+
+on:
+  workflow_dispatch:
+
+env:
+  ALLOW_MERGE: 'false'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # if: github.ref == 'refs/heads/master'
+
+    steps:
+
+      - name: Checkout master
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: main
+
+
+      - name: Set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Run smzdm
+        run: |
+          echo "Run tsdm..."
+          python -m pip install --upgrade pip
+          pip install requests parsel
+          python3 ./checkin/tsdm.py '${{ secrets.TSDM_COOKIE }}'
+          
