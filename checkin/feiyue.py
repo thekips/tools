@@ -54,6 +54,7 @@ logger.info('Check End...')
 
 
 # Halo Up
+time.sleep(random.random() + 1)
 response = session.get(HALO_URL % safeid)
 logger.info(get_text(response))
 
