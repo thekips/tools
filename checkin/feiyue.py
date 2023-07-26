@@ -9,6 +9,7 @@ from parsel import Selector
 
 
 EXP_URL = 'https://bbs.kfpromax.com/kf_growup.php?ok=3&safeid=%s'
+HALO_URL = 'https://bbs.kfpromax.com/kf_fw_ig_halo.php?do=buy&id=2&safeid=%s'
 GAME_URL = 'https://bbs.kfpromax.com/kf_fw_ig_index.php'
 BATTLE_URL = 'https://bbs.kfpromax.com/kf_fw_ig_intel.php'
 
@@ -50,6 +51,11 @@ data = {
 }
 response = session.get(EXP_URL % safeid)
 logger.info('Check End...')
+
+
+# Halo Up
+response = session.get(HALO_URL % safeid)
+logger.info(get_text(response))
 
 
 # Game Start
