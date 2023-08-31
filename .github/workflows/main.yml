@@ -96,3 +96,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
           python3 ./checkin/heybox.py '${{ secrets.HEYBOX_COOKIE }}'
+
+      - name: Run jd
+        run: |
+          echo "Run jd..."
+          python -m pip install --upgrade pip
+          pip install requests prettytable
+          python3 ./checkin/jd.py '${{ secrets.JD_COOKIE }}'
