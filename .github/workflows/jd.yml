@@ -1,4 +1,4 @@
-name: "zodgame"
+name: "jd"
 
 on:
   workflow_dispatch:
@@ -25,10 +25,9 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Run zodgame
+      - name: Run jd
         run: |
-          echo "Run zodgame..."
+          echo "Run jd..."
           python -m pip install --upgrade pip
-          pip install requests
-          python3 ./checkin/zodgame.py '${{ secrets.ZODGAME_COOKIE }}'
-          echo "Finished zodgame..."
+          pip install requests prettytable
+          python3 ./checkin/jd.py '${{ secrets.JD_COOKIE }}'
