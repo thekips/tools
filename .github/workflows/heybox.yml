@@ -31,4 +31,3 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
           python3 ./checkin/heybox.py '${{ secrets.HEYBOX_COOKIE }}'
-          
