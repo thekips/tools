@@ -1,0 +1,33 @@
+name: "karaoke"
+
+on:
+  workflow_dispatch:
+
+env:
+  ALLOW_MERGE: 'false'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # if: github.ref == 'refs/heads/master'
+
+    steps:
+
+      - name: Checkout master
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: main
+
+
+      - name: Set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Run karaoke
+        run: |
+          echo "Run karaoke..."
+          python -m pip install --upgrade pip
+          pip install requests
+          python3 ./checkin/karaoke.py '${{ secrets.KARAOKE_COOKIE }}'
