@@ -15,6 +15,9 @@ LIKIE_URL = "http://c.tieba.baidu.com/c/f/forum/like"
 TBS_URL = "http://tieba.baidu.com/dc/common/tbs"
 SIGN_URL = "http://c.tieba.baidu.com/c/c/forum/sign"
 
+URL_PAGE_SIGN = 'https://tieba.baidu.com/mo/q/usergrowth/commitUGTaskInfo'
+URL_PAGE_QUERY = 'https://tieba.baidu.com/mo/q/usergrowth/showUserGrowth'
+
 SIGN_DATA = {
     '_client_type': '2',
     '_client_version': '9.7.8.0',
@@ -162,14 +165,45 @@ def client_sign(bduss, tbs, fid, kw):
     res = s.post(url=SIGN_URL, data=data, timeout=5).json()
     return res
 
+def query_rank():
+
+    time.sleep(random.random())
+    resp = s.get(URL_PAGE_QUERY)
+    info = resp.json()['data']
+
+    level_info = info['level_info']
+    for level in level_info:
+        if level['is_current'] == 1:
+            rank = str(level['level'])
+            exp = str(level['growth_value'])
+            logger.info(f'Your rank is V{rank}, EXP is {exp}')
+            return
+
+def page_sign():
+    query_rank()
+
+    data = {
+        'tbs': 'd91a40aebcdd97ec1693470441',
+        'act_type': 'page_sign',
+        'cuid': '6137F977B7F6BB0CCD5906A6D9064433',
+    }
+    resp = s.post(URL_PAGE_SIGN, data=data)
+    logger.info(resp.json()['error'])
+
+    query_rank()
+
 def main():
+    logger.info('开始页面签到...')
+    page_sign()
+
+    time.sleep(random.random())
     logger.info("开始签到...")
     tbs = get_tbs()
     favorites = get_favorite(bduss)
     length = len(favorites)
     for index, fav in enumerate(favorites):
         logger.info("[%d/%d] " % (index+1, length) + "正在签到贴吧：" + fav["name"])
-        time.sleep(random.randint(1,5))
+        time.sleep(random.randint(1,3))
         logger.info(client_sign(bduss, tbs, fav["id"], fav["name"]))
     logger.info("签到完成")
 

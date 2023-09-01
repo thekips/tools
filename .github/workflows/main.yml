@@ -74,14 +74,6 @@ jobs:
           python telegram.py '${{ secrets.TELEGRAM_API_HASH }}'
           cd -
 
-      - name: Run tieba
-        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
-        run: |
-          echo "Run tieba..."
-          python -m pip install --upgrade pip
-          pip install requests
-          python3 ./checkin/tieba.py '${{ secrets.TIEBA_COOKIE }}'
-
       - name: Run smzdm
         if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
         run: |
@@ -110,3 +102,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
           python3 ./checkin/karaoke.py '${{ secrets.KARAOKE_COOKIE }}'
+
+      - name: Run tieba
+        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
+        run: |
+          echo "Run tieba..."
+          python -m pip install --upgrade pip
+          pip install requests
+          python3 ./checkin/tieba.py '${{ secrets.TIEBA_COOKIE }}'
