@@ -179,11 +179,11 @@ def query_rank():
             logger.info(f'Your rank is V{rank}, EXP is {exp}')
             return
 
-def page_sign():
+def page_sign(tbs):
     query_rank()
 
     data = {
-        'tbs': 'd91a40aebcdd97ec1693470441',
+        'tbs': tbs,
         'act_type': 'page_sign',
         'cuid': '6137F977B7F6BB0CCD5906A6D9064433',
     }
@@ -194,11 +194,11 @@ def page_sign():
 
 def main():
     logger.info('开始页面签到...')
-    page_sign()
+    tbs = get_tbs()
+    page_sign(tbs)
 
     time.sleep(random.random())
     logger.info("开始签到...")
-    tbs = get_tbs()
     favorites = get_favorite(bduss)
     length = len(favorites)
     for index, fav in enumerate(favorites):
