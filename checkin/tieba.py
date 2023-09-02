@@ -179,7 +179,7 @@ def query_rank(is_show=False):
             if is_show:
                 logger.info(f'Your rank is V{rank}, EXP is {exp}')
 
-            return exp
+            return int(exp)
 
 def page_sign(tbs):
     # 贴吧等级签到
