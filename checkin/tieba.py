@@ -234,6 +234,7 @@ def emotion_set(tbs):
         logger.info(response.json())
 
     submit_emotion(0)
+    time.sleep(random.randint(1,4))
     submit_emotion(1)
 
     cur_exp = query_rank()
