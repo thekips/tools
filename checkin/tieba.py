@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-import os
 import sys
 import re
 import requests
@@ -246,12 +245,12 @@ page_sign(tbs)
 
 emotion_set(tbs)
 
-# time.sleep(random.random())
-# logger.info("开始签到...")
-# favorites = get_favorite(bduss)
-# length = len(favorites)
-# for index, fav in enumerate(favorites):
-#     logger.info("[%d/%d] " % (index+1, length) + "正在签到贴吧：" + fav["name"])
-#     time.sleep(random.randint(1,3))
-#     logger.info(client_sign(bduss, tbs, fav["id"], fav["name"]))
-# logger.info("签到完成")
+time.sleep(random.random())
+logger.info("开始签到...")
+favorites = get_favorite(bduss)
+length = len(favorites)
+for index, fav in enumerate(favorites):
+    logger.info("[%d/%d] " % (index+1, length) + "正在签到贴吧：" + fav["name"])
+    time.sleep(random.randint(1,3))
+    logger.info(client_sign(bduss, tbs, fav["id"], fav["name"]))
+logger.info("签到完成")
