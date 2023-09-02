@@ -200,25 +200,42 @@ def page_sign(tbs):
 def emotion_set(tbs):
     # 设置今日心情
     logger.info('设置今日心情...')
+    # Maybe need to alter...
+    figure_meta = 'eyJzdHlsZUEiOnsiYmFja2dyb3VuZCI6ImJhY2tncm91bmRfREJBNkY1IiwiaXRlbXMiOnsiaGVhZCI6eyJpdGVtSWQiOiJoZWFkX2hlYWQyMDQiLCJjb2xvciI6ImhlYWRfRkZGQkZBIn0sImJvZHkiOnsiaXRlbUlkIjoiYm9keV9ib2R5MSIsImNvbG9yIjoiYm9keV9GQUYxRUQifSwiZWFyIjp7Iml0ZW1JZCI6ImVhcl9lYXIyMDQiLCJjb2xvciI6ImJvZHlfRkFGMUVEIn0sImV5ZWJyb3ciOnsiaXRlbUlkIjoiZXllYnJvd19leWVicm93MjA0IiwiY29sb3IiOiJleWVicm93Xzc3NDgyOSIsInBvc2l0aW9uIjp7IngiOi0yOSwieSI6LTE4OH19LCJoYWlyIjp7Iml0ZW1JZCI6ImhhaXJfaGFpcjIwNCIsImNvbG9yIjoiaGFpcl9GRkQxODUifSwibm9zZSI6eyJpdGVtSWQiOiJub3NlX25vc2UyMDQiLCJjb2xvciI6ImhlYWRfRkZGQkZBIn0sImZhY2VEZWNvcmF0aW9uIjp7Iml0ZW1JZCI6ImZhY2VEZWNvcmF0aW9uX2JsdXNoZXIyMDQifSwiZXllIjp7Iml0ZW1JZCI6ImV5ZV9leWUxMDMifSwibmVja2xhY2UiOnsiaXRlbUlkIjoibmVja2xhY2VfbmVja2xhY2UyMTA1In0sImNsb3RoZXMiOnsiaXRlbUlkIjoiY2xvdGhlc193b3JsZGN1cDI2In0sImdsYXNzZXMiOnsiaXRlbUlkIjoiZ2xhc3Nlc19nbGFzc2VzMjA4In0sIm90aGVyIjp7Iml0ZW1JZCI6Im90aGVyX2hhdDIxMDUifSwibW91dGgiOnsiaXRlbUlkIjoibW91dGhfbW91dGgxMDQiLCJjb2xvciI6ImhlYWRfRkZGQkZBIn19fSwic3R5bGVCIjp7ImJhY2tncm91bmQiOiJiYWNrZ3JvdW5kXzk0Q0FGRiIsInJlY29tbWVuZElkIjoicmVjb21tZW5kX3N0eWxlQl9wZXJzb24yMTIiLCJzdHlsZSI6InN0eWxlQiIsIml0ZW1zIjp7ImhlYWQiOnsiaXRlbUlkIjoiaGVhZF9zdHlsZUJfaGVhZDIxMiIsImNvbG9yIjoiaGVhZF9GRUU3RTAifSwiYm9keSI6eyJpdGVtSWQiOiJib2R5X3N0eWxlQl9ib2R5MSIsImNvbG9yIjoiYm9keV9GRUUwRDUifSwiY2xvdGhlcyI6eyJpdGVtSWQiOiJjbG90aGVzX3N0eWxlQl9jbG90aGVzMjEyIn0sImVhciI6eyJpdGVtSWQiOiJlYXJfc3R5bGVCX2VhcjIxMiIsImNvbG9yIjoiYm9keV9GRUUwRDUifSwiZXllYnJvdyI6eyJpdGVtSWQiOiJleWVicm93X3N0eWxlQl9leWVicm93MjEyIiwiY29sb3IiOiJleWVicm93XzI2MUE0MCJ9LCJleWUiOnsiaXRlbUlkIjoiZXllX3N0eWxlQl9leWUyMTIifSwiaGFpciI6eyJpdGVtSWQiOiJoYWlyX3N0eWxlQl9oYWlyMjEyIiwiY29sb3IiOiJoYWlyXzI2MUE0MCJ9LCJtb3V0aCI6eyJpdGVtSWQiOiJtb3V0aF9zdHlsZUJfbW91dGgyMTIiLCJjb2xvciI6ImhlYWRfRkVFN0UwIn0sIm5vc2UiOnsiaXRlbUlkIjoibm9zZV9zdHlsZUJfbm9zZTIxMiIsImNvbG9yIjoiaGVhZF9GRUU3RTAifSwiZWFycmluZ3MiOnsiaXRlbUlkIjoiZWFycmluZ3Nfc3R5bGVCX2VhcnJpbmdzMjEyIn19fSwiY3VycmVudFN0eWxlIjoic3R5bGVBIn0='
+
     data = {
-        'meta_type': 'url',
-        'meta_value': 'https://tieba-ares.cdn.bcebos.com/80e9024323f6c1eb0a68812b8cb3a641.json',
-        'background_type': 'tone',
-        'background_value': 'DBA6F5',
-        'figure_pid': '300674490666',
-        'background_figure_pid': '300684193294',
-        'text': '放烟花',
-        'icon': '300468284768',
-        'tbs': tbs,
+        'figure_meta': figure_meta,
+        'tbs': '',
     }
+    response = s.post('https://tieba.baidu.com/mo/q/customfigure/uploadFigureMeta', data=data)
+    res_link = response.json()['data']['resource_link']
+    logger.info('resource link is: ' + res_link)
 
     pre_exp = query_rank()
 
-    response = s.post(
-        'https://tieba.baidu.com/mo/q/customfigure/submitCustomFigure',
-        data=data,
-    )
-    logger.info(response.json())
+    emotion_list = [['放烟花', '300468284768'], ['福到了', '300468285246']]
+
+    def submit_emotion(index):
+        data = {
+            'meta_type': 'url',
+            'meta_value': res_link,
+            'background_type': 'tone',
+            'background_value': 'DBA6F5',
+            'figure_pid': '300674490666',
+            'background_figure_pid': '300684193294',
+            'text': emotion_list[index][0],
+            'icon': emotion_list[index][1],
+            'tbs': '',
+        }
+
+        response = s.post(
+            'https://tieba.baidu.com/mo/q/customfigure/submitCustomFigure',
+            data=data,
+        )
+        logger.info(response.json())
+
+    submit_emotion(0)
+    submit_emotion(1)
 
     cur_exp = query_rank()
     logger.info('你获得了%d点经验' % (cur_exp - pre_exp))
