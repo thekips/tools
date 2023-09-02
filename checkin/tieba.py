@@ -165,8 +165,8 @@ def client_sign(bduss, tbs, fid, kw):
     res = s.post(url=SIGN_URL, data=data, timeout=5).json()
     return res
 
-def query_rank():
-
+def query_rank(is_show=False):
+    # 查询贴吧等级
     time.sleep(random.random())
     resp = s.get(URL_PAGE_QUERY)
     info = resp.json()['data']
@@ -176,11 +176,15 @@ def query_rank():
         if level['is_current'] == 1:
             rank = str(level['level'])
             exp = str(level['growth_value'])
-            logger.info(f'Your rank is V{rank}, EXP is {exp}')
-            return
+            if is_show:
+                logger.info(f'Your rank is V{rank}, EXP is {exp}')
+
+            return exp
 
 def page_sign(tbs):
-    query_rank()
+    # 贴吧等级签到
+    logger.info('开始贴吧等级签到...')
+    pre_exp = query_rank()
 
     data = {
         'tbs': tbs,
@@ -190,23 +194,47 @@ def page_sign(tbs):
     resp = s.post(URL_PAGE_SIGN, data=data)
     logger.info(resp.json()['error'])
 
-    query_rank()
+    cur_exp = query_rank()
+    logger.info('你获得了%d点经验' % (cur_exp - pre_exp))
 
-def main():
-    logger.info('开始页面签到...')
-    tbs = get_tbs()
-    page_sign(tbs)
+def emotion_set(tbs):
+    # 设置今日心情
+    logger.info('设置今日心情...')
+    data = {
+        'meta_type': 'url',
+        'meta_value': 'https://tieba-ares.cdn.bcebos.com/80e9024323f6c1eb0a68812b8cb3a641.json',
+        'background_type': 'tone',
+        'background_value': 'DBA6F5',
+        'figure_pid': '300674490666',
+        'background_figure_pid': '300684193294',
+        'text': '放烟花',
+        'icon': '300468284768',
+        'tbs': tbs,
+    }
 
-    time.sleep(random.random())
-    logger.info("开始签到...")
-    favorites = get_favorite(bduss)
-    length = len(favorites)
-    for index, fav in enumerate(favorites):
-        logger.info("[%d/%d] " % (index+1, length) + "正在签到贴吧：" + fav["name"])
-        time.sleep(random.randint(1,3))
-        logger.info(client_sign(bduss, tbs, fav["id"], fav["name"]))
-    logger.info("签到完成")
+    pre_exp = query_rank()
+
+    response = s.post(
+        'https://tieba.baidu.com/mo/q/customfigure/submitCustomFigure',
+        data=data,
+    )
+    logger.info(response.json())
+
+    cur_exp = query_rank()
+    logger.info('你获得了%d点经验' % (cur_exp - pre_exp))
 
 
-if __name__ == '__main__':
-    main()
+tbs = get_tbs()
+page_sign(tbs)
+
+emotion_set(tbs)
+
+# time.sleep(random.random())
+# logger.info("开始签到...")
+# favorites = get_favorite(bduss)
+# length = len(favorites)
+# for index, fav in enumerate(favorites):
+#     logger.info("[%d/%d] " % (index+1, length) + "正在签到贴吧：" + fav["name"])
+#     time.sleep(random.randint(1,3))
+#     logger.info(client_sign(bduss, tbs, fav["id"], fav["name"]))
+# logger.info("签到完成")
