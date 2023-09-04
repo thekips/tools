@@ -90,14 +90,6 @@ jobs:
           pip install requests
           python3 ./checkin/heybox.py '${{ secrets.HEYBOX_COOKIE }}'
 
-      - name: Run jd
-        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
-        run: |
-          echo "Run jd..."
-          python -m pip install --upgrade pip
-          pip install requests
-          python3 ./checkin/jd.py '${{ secrets.JD_COOKIE }}'
-
       - name: Run karaoke
         if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
         run: |
@@ -113,3 +105,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
           python3 ./checkin/tieba.py '${{ secrets.TIEBA_COOKIE }}'
+
+      - name: Run jd
+        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
+        run: |
+          echo "Run jd..."
+          python -m pip install --upgrade pip
+          pip install requests
+          python3 ./checkin/jd.py '${{ secrets.JD_COOKIE }}'
