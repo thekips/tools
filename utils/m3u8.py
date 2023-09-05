@@ -1,15 +1,16 @@
 import os
 import requests
 import ffmpeg
+import sys
 from concurrent.futures import ThreadPoolExecutor
+from lxml import etree
 
-# 定义M3U8 URL和保存目录
-m3u8_url = 'your_m3u8_url'
-output_dir = os.path.join(os.getcwd(), 'data')
+def get_m3u8_url(url):
+    response = requests.get(url)
+    html = etree.HTML(response.text)
+    video = html.xpath('//*[@id="video-play"]')
 
-# 创建保存目录
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+    return video[0].get('data-src')
 
 def dlVideo(segment_url, i):
     try:
@@ -31,8 +32,17 @@ def dlVideo(segment_url, i):
         print(f"Retry to download segment {segment_url}")
         dlVideo(segment_url)
 
+# 获得M3U8 URL和保存目录
+url = sys.argv[1]
+m3u8_url = get_m3u8_url(url)
+output_dir = os.path.join(os.getcwd(), 'data')
+
+# 创建保存目录
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
 # 下载M3U8文件
+print(m3u8_url)
 response = requests.get(m3u8_url)
 if response.status_code == 200:
     m3u8_content = response.text
