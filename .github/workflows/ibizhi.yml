@@ -33,6 +33,6 @@ jobs:
           python3 ./checkin/ibizhi.py '${{ secrets.IBIZHI_COOKIE }}'
           git config --global user.email "issizhe@outlook.com"
           git config --global user.name "thekips"
-          git status
+          git add .
           git commit -m "update wallpaper.txt"
           git push
