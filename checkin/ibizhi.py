@@ -44,5 +44,6 @@ index = random.randint(0, 29)
 wallpaper['home'] = info[index]['originalUrl']
 
 wallpaper = json.dumps(wallpaper, ensure_ascii=False)
+print(wallpaper)
 with open('wallpaper.txt', 'w', encoding='utf-8') as f:
     f.write(wallpaper)
