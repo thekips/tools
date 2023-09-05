@@ -29,6 +29,6 @@ jobs:
         run: |
           echo "Run ibizhi..."
           python -m pip install --upgrade pip
-          pip install requests
+          pip install requests json2py
           python3 ./checkin/ibizhi.py '${{ secrets.IBIZHI_COOKIE }}'
           git status
