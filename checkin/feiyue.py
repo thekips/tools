@@ -12,6 +12,7 @@ EXP_URL = 'https://bbs.kfpromax.com/kf_growup.php?ok=3&safeid=%s'
 HALO_URL = 'https://bbs.kfpromax.com/kf_fw_ig_halo.php?do=buy&id=2&safeid=%s'
 GAME_URL = 'https://bbs.kfpromax.com/kf_fw_ig_index.php'
 BATTLE_URL = 'https://bbs.kfpromax.com/kf_fw_ig_intel.php'
+BOX_URL = 'https://bbs.kfpromax.com/kf_fw_ig_mybpdt.php'
 
 def get_text(response):
     selector = Selector(response.text)
@@ -65,7 +66,7 @@ data = {
 }
 response = session.get(GAME_URL)
 while True:
-    time.sleep(random.random() + 1)
+    time.sleep(random.random() + 0.5)
     response = session.post(BATTLE_URL, data=data)
 
     if response.text == 'no':
@@ -73,3 +74,20 @@ while True:
         break
     else:
         logger.info(get_text(response))
+
+
+# Open box
+data = {
+    'do': '3',
+    'id': '4',
+    'safeid': safeid,
+}
+while True:
+    response = session.post(BOX_URL, data=data)
+
+    if response.status_code == 200:
+        logger.info(response.text)
+    else:
+        break
+
+    time.sleep(random.random() + 0.5)
