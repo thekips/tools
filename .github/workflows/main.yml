@@ -113,3 +113,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
           python3 ./checkin/jd.py '${{ secrets.JD_COOKIE }}'
+
+      - name: Run ibizhi
+        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
+        run: |
+          echo "Run ibizhi..."
+          python -m pip install --upgrade pip
+          pip install requests js2py numpy
+          python3 ./checkin/ibizhi.py '${{ secrets.IBIZHI_COOKIE }}'
+          git config --global user.email "issizhe@outlook.com"
+          git config --global user.name "thekips"
+          git add .
+          git commit -m "update wallpaper.txt"
+          git push
