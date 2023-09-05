@@ -31,14 +31,6 @@ jobs:
       - name: Random sleep
         if: github.event_name == 'schedule'
         run: sleep $(shuf -i 2-60 -n 1)
-
-      - name: Run zodgame
-        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
-        run: |
-          echo "Run zodgame..."
-          python -m pip install --upgrade pip
-          pip install requests
-          python3 ./checkin/zodgame.py '${{ secrets.ZODGAME_COOKIE }}'
           
       - name: Run southplus
         if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
@@ -105,6 +97,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
           python3 ./checkin/tieba.py '${{ secrets.TIEBA_COOKIE }}'
+
+      - name: Run zodgame
+        if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
+        run: |
+          echo "Run zodgame..."
+          python -m pip install --upgrade pip
+          pip install requests
+          python3 ./checkin/zodgame.py '${{ secrets.ZODGAME_COOKIE }}'
 
       - name: Run jd
         if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
