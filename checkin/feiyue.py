@@ -66,7 +66,7 @@ data = {
 }
 response = session.get(GAME_URL)
 while True:
-    time.sleep(random.random() + 0.5)
+    time.sleep(random.random() + 1)
     response = session.post(BATTLE_URL, data=data)
 
     if response.text == 'no':
@@ -85,9 +85,9 @@ data = {
 while True:
     response = session.post(BOX_URL, data=data)
 
-    if response.status_code == 200:
-        logger.info(response.text)
-    else:
+    if response.text == '盒子不足，请刷新查看最新数目。':
         break
+    else:
+        logger.info(response.text)
 
-    time.sleep(random.random() + 0.5)
+    time.sleep(random.random() + 1)
