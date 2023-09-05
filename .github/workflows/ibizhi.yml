@@ -29,6 +29,8 @@ jobs:
         run: |
           echo "Run ibizhi..."
           python -m pip install --upgrade pip
-          pip install requests js2py
+          pip install requests js2py numpy
           python3 ./checkin/ibizhi.py '${{ secrets.IBIZHI_COOKIE }}'
           git status
+          git commit -m "update wallpaper.txt"
+          git push
