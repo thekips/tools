@@ -1,1 +1,1 @@
-{"lock": "https://zjc.ibzhi.com/wallpaper/5fbe26ce13ac0800016aad26.jpg?x-image-process=image/format,jpg", "home": "https://zjc.ibzhi.com/wallpaper/5fbe26cc2a1e100001dd3dfd.jpg?x-image-process=image/format,jpg"}
+{"lock": "https://zjc.ibzhi.com/wallpaper/621dcd84432b160001787035.jpg?x-image-process=image/format,jpg", "home": "https://zjc.ibzhi.com/wallpaper/621dcd8a5da6850001816a09.jpg?x-image-process=image/format,jpg"}
