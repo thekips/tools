@@ -4,6 +4,7 @@ import requests
 import random
 import json
 import sys
+from checkin_logger import logger
 
 CryptoJS = js2py.require('crypto-js')
 token = sys.argv[1]
@@ -38,12 +39,14 @@ info = decode_b64_aes(response.text)
 info = info['data']
 
 wallpaper = {}
-index = random.randint(0, 29)
+info_len = len(info)
+logger.info(info_len)
+index = random.randint(0, info_len)
 wallpaper['lock'] = info[index]['originalUrl']
-index = random.randint(0, 29)
+index = random.randint(0, info_len)
 wallpaper['home'] = info[index]['originalUrl']
 
 wallpaper = json.dumps(wallpaper, ensure_ascii=False)
-print(wallpaper)
+logger.info(wallpaper)
 with open('wallpaper.txt', 'w', encoding='utf-8') as f:
     f.write(wallpaper)
