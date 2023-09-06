@@ -50,5 +50,8 @@ session.headers = headers
 # headers["Cookie"] = dict_to_cookie(cookie)
 
 resp = session.post(URL)
-info = re.findall(r'(?<=dailyAward).*?(?=,"beanImgUrl)', resp.text)[0] + "}"
-logger.info(info)
+try:
+    info = re.findall(r'(?<=dailyAward).*?(?=,"beanImgUrl)', resp.text)[0] + "}"
+    logger.info(info)
+except:
+    logger.error('Sign Failure')
