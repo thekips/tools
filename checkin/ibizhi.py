@@ -1,4 +1,4 @@
-﻿import js2py
+import js2py
 import base64
 import requests
 import random
@@ -47,6 +47,7 @@ index = random.randint(0, info_len)
 wallpaper['lock'] = re.sub(r'\?.*', '', info[index]['originalUrl'])
 index = random.randint(0, info_len)
 wallpaper['home'] = re.sub(r'\?.*', '', info[index]['originalUrl'])
+wallpaper['class'] = index[I]
 
 wallpaper = json.dumps(wallpaper, ensure_ascii=False)
 logger.info(wallpaper)
