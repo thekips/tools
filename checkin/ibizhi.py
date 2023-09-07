@@ -44,7 +44,7 @@ wallpaper = {}
 wallpaper['class'] = index[I]
 info_len = len(info)
 logger.info(info_len)
-index = random.randint(0, info_len)
+index = random.randint(0, info_len - 1)
 wallpaper['lock'] = re.sub(r'\?.*', '', info[index]['originalUrl'])
 index = random.randint(0, info_len)
 wallpaper['home'] = re.sub(r'\?.*', '', info[index]['originalUrl'])
