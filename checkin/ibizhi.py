@@ -41,13 +41,13 @@ info = decode_b64_aes(response.text)
 info = info['data']
 
 wallpaper = {}
+wallpaper['class'] = index[I]
 info_len = len(info)
 logger.info(info_len)
 index = random.randint(0, info_len)
 wallpaper['lock'] = re.sub(r'\?.*', '', info[index]['originalUrl'])
 index = random.randint(0, info_len)
 wallpaper['home'] = re.sub(r'\?.*', '', info[index]['originalUrl'])
-wallpaper['class'] = index[I]
 
 wallpaper = json.dumps(wallpaper, ensure_ascii=False)
 logger.info(wallpaper)
