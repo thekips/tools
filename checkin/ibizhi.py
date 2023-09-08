@@ -28,6 +28,7 @@ params = {
 }
 response = requests.get('https://client.ibzhi.com/http/client', params=params)
 page_num = decode_b64_aes(response.text)['totalPages']
+page_num = int(page_num ** 0.5)
 
 rand = random.randint(0, page_num-1)
 params = {
