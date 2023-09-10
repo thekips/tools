@@ -19,7 +19,6 @@ def decode_b64_aes(enc):
     return eval(dec)
 
 
-logger.info('Get class %s' % index[I])
 ids = classify_ids[index[I]]
 params = {
     'token': '',
@@ -37,6 +36,7 @@ params = {
     'path': 'wallpaper/get_list_by_classify',
 }
 
+logger.info('Get class %s in page %d/%d' % (index[I], rand + 1, page_num))
 response = requests.get('https://client.ibzhi.com/http/client', params=params)
 info = decode_b64_aes(response.text)
 info = info['data']
@@ -44,11 +44,11 @@ info = info['data']
 wallpaper = {}
 wallpaper['class'] = index[I]
 info_len = len(info)
-logger.info(info_len)
-index = random.randint(0, info_len - 1)
-wallpaper['lock'] = re.sub(r'\?.*', '', info[index]['originalUrl'])
-index = random.randint(0, info_len)
-wallpaper['home'] = re.sub(r'\?.*', '', info[index]['originalUrl'])
+index1 = random.randint(0, info_len - 1)
+wallpaper['lock'] = re.sub(r'\?.*', '', info[index1]['originalUrl'])
+index2 = random.randint(0, info_len - 1)
+wallpaper['home'] = re.sub(r'\?.*', '', info[index2]['originalUrl'])
+logger.info("Choose No.%d & No.%d in %d pics" % (index1 + 1, index2 + 1, info_len))
 
 wallpaper = json.dumps(wallpaper, ensure_ascii=False)
 logger.info(wallpaper)
