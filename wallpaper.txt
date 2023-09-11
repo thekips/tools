@@ -1,1 +1,1 @@
-{"class": "静物", "lock": "https://zjc.ibzhi.com/wallpaper/wallpaper_1689072551897643115.JPG", "home": "https://zjc.ibzhi.com/wallpaper/wallpaper_1677239193749639008.jpeg"}
+{"class": "插画", "lock": "https://zjc.ibzhi.com/wallpaper/wallpaper_1692192079187914309.jpeg", "home": "https://zjc.ibzhi.com/wallpaper/wallpaper_1692192079186886853.jpeg"}
