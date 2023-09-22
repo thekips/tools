@@ -6,13 +6,16 @@ import hashlib
 import time
 import copy
 import random
+import base64
 
 from checkin_logger import logger
 
 # API_URL
-LIKIE_URL = "http://c.tieba.baidu.com/c/f/forum/like"
-TBS_URL = "http://tieba.baidu.com/dc/common/tbs"
-SIGN_URL = "http://c.tieba.baidu.com/c/c/forum/sign"
+LIKIE_URL = 'http://c.tieba.baidu.com/c/f/forum/like'
+TBS_URL = 'http://tieba.baidu.com/dc/common/tbs'
+SIGN_URL = 'http://c.tieba.baidu.com/c/c/forum/sign'
+HOT_THREAD = 'https://tieba.baidu.com/mo/q/activity/getActivityThreadList'
+AGREE_URL = 'https://tieba.baidu.com/mo/q/submit/opAgree'
 
 URL_PAGE_SIGN = 'https://tieba.baidu.com/mo/q/usergrowth/commitUGTaskInfo'
 URL_PAGE_QUERY = 'https://tieba.baidu.com/mo/q/usergrowth/showUserGrowth'
@@ -196,19 +199,61 @@ def page_sign(tbs):
     cur_exp = query_rank()
     logger.info('你获得了%d点经验' % (cur_exp - pre_exp))
 
+def hot_thread(tbs):
+    params = {
+        'rn': '10',
+        'pn': '1',
+        'sort_type': '1',
+        'order_type': '1',
+        'activity_name': 'excellent_thread',
+    }
+    resp = s.get(HOT_THREAD, params=params)
+
+    if resp.status_code != 200:
+        logger.info('Hot thread failed...')
+        return
+
+    pre_exp = query_rank()
+    datas = resp.json()['data']['thread_list']
+    for data in datas:
+        agree = data['agree']['has_agree']
+
+        if not agree:
+            params = {
+                'forum_id': data['forum_id'],
+                'thread_id': data['tid'],
+                'op_type': '0',
+                'agree_type': '2',
+                'obj_type': '3',
+                'tbs': tbs,
+                'is_client': '1',
+                'client_type': '1',
+            }
+            response = requests.get(AGREE_URL, params=params, cookies=cookies, headers=headers)  
+
+            logger.info(data['title'])
+            break
+
+    cur_exp = query_rank()
+    logger.info('你获得了%d点经验' % (cur_exp - pre_exp))
+
 def emotion_set(tbs):
     # 设置今日心情
     logger.info('设置今日心情...')
     # Maybe need to alter...
-    figure_meta = 'eyJzdHlsZUEiOnsiYmFja2dyb3VuZCI6ImJhY2tncm91bmRfREJBNkY1IiwiaXRlbXMiOnsiaGVhZCI6eyJpdGVtSWQiOiJoZWFkX2hlYWQyMDQiLCJjb2xvciI6ImhlYWRfRkZGQkZBIn0sImJvZHkiOnsiaXRlbUlkIjoiYm9keV9ib2R5MSIsImNvbG9yIjoiYm9keV9GQUYxRUQifSwiZWFyIjp7Iml0ZW1JZCI6ImVhcl9lYXIyMDQiLCJjb2xvciI6ImJvZHlfRkFGMUVEIn0sImV5ZWJyb3ciOnsiaXRlbUlkIjoiZXllYnJvd19leWVicm93MjA0IiwiY29sb3IiOiJleWVicm93Xzc3NDgyOSIsInBvc2l0aW9uIjp7IngiOi0yOSwieSI6LTE4OH19LCJoYWlyIjp7Iml0ZW1JZCI6ImhhaXJfaGFpcjIwNCIsImNvbG9yIjoiaGFpcl9GRkQxODUifSwibm9zZSI6eyJpdGVtSWQiOiJub3NlX25vc2UyMDQiLCJjb2xvciI6ImhlYWRfRkZGQkZBIn0sImZhY2VEZWNvcmF0aW9uIjp7Iml0ZW1JZCI6ImZhY2VEZWNvcmF0aW9uX2JsdXNoZXIyMDQifSwiZXllIjp7Iml0ZW1JZCI6ImV5ZV9leWUxMDMifSwibmVja2xhY2UiOnsiaXRlbUlkIjoibmVja2xhY2VfbmVja2xhY2UyMTA1In0sImNsb3RoZXMiOnsiaXRlbUlkIjoiY2xvdGhlc193b3JsZGN1cDI2In0sImdsYXNzZXMiOnsiaXRlbUlkIjoiZ2xhc3Nlc19nbGFzc2VzMjA4In0sIm90aGVyIjp7Iml0ZW1JZCI6Im90aGVyX2hhdDIxMDUifSwibW91dGgiOnsiaXRlbUlkIjoibW91dGhfbW91dGgxMDQiLCJjb2xvciI6ImhlYWRfRkZGQkZBIn19fSwic3R5bGVCIjp7ImJhY2tncm91bmQiOiJiYWNrZ3JvdW5kXzk0Q0FGRiIsInJlY29tbWVuZElkIjoicmVjb21tZW5kX3N0eWxlQl9wZXJzb24yMTIiLCJzdHlsZSI6InN0eWxlQiIsIml0ZW1zIjp7ImhlYWQiOnsiaXRlbUlkIjoiaGVhZF9zdHlsZUJfaGVhZDIxMiIsImNvbG9yIjoiaGVhZF9GRUU3RTAifSwiYm9keSI6eyJpdGVtSWQiOiJib2R5X3N0eWxlQl9ib2R5MSIsImNvbG9yIjoiYm9keV9GRUUwRDUifSwiY2xvdGhlcyI6eyJpdGVtSWQiOiJjbG90aGVzX3N0eWxlQl9jbG90aGVzMjEyIn0sImVhciI6eyJpdGVtSWQiOiJlYXJfc3R5bGVCX2VhcjIxMiIsImNvbG9yIjoiYm9keV9GRUUwRDUifSwiZXllYnJvdyI6eyJpdGVtSWQiOiJleWVicm93X3N0eWxlQl9leWVicm93MjEyIiwiY29sb3IiOiJleWVicm93XzI2MUE0MCJ9LCJleWUiOnsiaXRlbUlkIjoiZXllX3N0eWxlQl9leWUyMTIifSwiaGFpciI6eyJpdGVtSWQiOiJoYWlyX3N0eWxlQl9oYWlyMjEyIiwiY29sb3IiOiJoYWlyXzI2MUE0MCJ9LCJtb3V0aCI6eyJpdGVtSWQiOiJtb3V0aF9zdHlsZUJfbW91dGgyMTIiLCJjb2xvciI6ImhlYWRfRkVFN0UwIn0sIm5vc2UiOnsiaXRlbUlkIjoibm9zZV9zdHlsZUJfbm9zZTIxMiIsImNvbG9yIjoiaGVhZF9GRUU3RTAifSwiZWFycmluZ3MiOnsiaXRlbUlkIjoiZWFycmluZ3Nfc3R5bGVCX2VhcnJpbmdzMjEyIn19fSwiY3VycmVudFN0eWxlIjoic3R5bGVBIn0='
+    resp = s.get('https://tieba.baidu.com/mo/q/customfigure/showCustomFigure')
+    res_link = resp.json()['data']['figure_meta']['url']
+    logger.info('res_link is: ' + res_link)
+    resp = requests.get(res_link)
+    logger.info('resp is: ' + resp.text)
+    figure_meta = base64.b64encode(resp.text)
+    logger.info('figuremeata is: ' + figure_meta)
 
     data = {
         'figure_meta': figure_meta,
         'tbs': '',
     }
     response = s.post('https://tieba.baidu.com/mo/q/customfigure/uploadFigureMeta', data=data)
-    res_link = response.json()['data']['resource_link']
-    logger.info('resource link is: ' + res_link)
 
     pre_exp = query_rank()
 
