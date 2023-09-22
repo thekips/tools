@@ -246,7 +246,7 @@ def emotion_set(tbs):
     logger.info('res_link is: ' + res_link)
     resp = requests.get(res_link)
     logger.info('resp is: ' + resp.text)
-    figure_meta = base64.b64encode(resp.text)
+    figure_meta = base64.b64encode(resp.text.encode('utf-8'))
     logger.info('figuremeata is: ' + figure_meta)
 
     data = {
