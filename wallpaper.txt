@@ -1,1 +1,1 @@
-{"class": "城市道路", "lock": "https://zjc.ibzhi.com/wallpaper/wallpaper_1688124680304681285.jpeg", "home": "https://zjc.ibzhi.com/wallpaper/wallpaper_1690386095594142507.jpeg"}
+{"class": "插画", "lock": "https://zjc.ibzhi.com/wallpaper/wallpaper_1693404797504280533.jpeg", "home": "https://zjc.ibzhi.com/wallpaper/wallpaper_1693404797505354807.jpeg"}
