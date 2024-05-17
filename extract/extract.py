@@ -18,7 +18,7 @@ else:
     pws = [x.strip() for x in res]
 
     for pw in pws:
-        cmd = '7z e "%s" -p"%s" -o"%s"' % (file_path, pw, out_path)
+        cmd = '7z e "%s" -p"%s" -o"%s" -y' % (file_path, pw, out_path)
         print(cmd)
         ret = os.system(cmd)
         if ret == 0:
