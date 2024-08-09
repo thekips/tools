@@ -1,1 +1,1 @@
-{"class": "风景", "lock": "https://hwoss.ibzhi.com/wallpaper/wallpaper_1720672911280124619.jpg", "home": "https://hwoss.ibzhi.com/wallpaper/wallpaper_1720935293945356327.jpeg"}
+{"class": "插画", "lock": "https://hwoss.ibzhi.com/wallpaper/wallpaper_1722664345363598873.jpeg", "home": "https://hwoss.ibzhi.com/wallpaper/wallpaper_1722664345364629872.jpeg"}
