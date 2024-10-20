@@ -9,7 +9,8 @@ from checkin_logger import logger
 CryptoJS = js2py.require('crypto-js')
 # token = sys.argv[1]
 index = {0: '静物', 1: '风景', 2: '插画', 3: '城市道路'}
-I = random.randint(0, len(index)-1)
+#I = random.randint(0, len(index)-1)
+I = 2
 classify_ids = {index[0]: '5fac0f5e8404d300019eeb5f', index[1]: '5f97ac059b97b30001021442', index[2]: '5f9bfc0251fa9f00016cc685', index[3]: '5fb3cd8b861e0d00016225e4'}
 
 def decode_b64_aes(enc):
