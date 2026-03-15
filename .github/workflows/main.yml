@@ -66,6 +66,7 @@ jobs:
           cd ./checkin/telegram
           python telegram.py '${{ secrets.TELEGRAM_API_HASH }}'
           cd -
+        continue-on-error: true
 
       - name: Run smzdm
         #if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
