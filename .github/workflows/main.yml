@@ -76,6 +76,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests prettytable --quiet
           python3 ./checkin/smzdm.py '${{ secrets.SMZDM_COOKIE }}'
+        continue-on-error: true
 
       - name: Run heybox
         #if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
@@ -85,6 +86,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests --quiet
           python3 ./checkin/heybox.py '${{ secrets.HEYBOX_COOKIE }}'
+        continue-on-error: true
 
       - name: Run karaoke
         #if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
@@ -94,6 +96,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests --quiet
           python3 ./checkin/karaoke.py '${{ secrets.KARAOKE_COOKIE }}'
+        continue-on-error: true
 
       - name: Run tieba
         if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
@@ -102,6 +105,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests --quiet
           python3 ./checkin/tieba.py '${{ secrets.TIEBA_COOKIE }}'
+        continue-on-error: true
 
       - name: Run zodgame
         if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
@@ -110,6 +114,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests --quiet
           python3 ./checkin/zodgame.py '${{ secrets.ZODGAME_COOKIE }}'
+        continue-on-error: true
 
       - name: Run jd
         if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
@@ -118,6 +123,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests --quiet
           python3 ./checkin/jd.py '${{ secrets.JD_COOKIE }}'
+        continue-on-error: true
 
       - name: Run ibizhi
         if: github.event.schedule == '00 23 * * *' || github.event_name != 'schedule'
@@ -131,3 +137,4 @@ jobs:
           git add .
           git commit -m "update wallpaper.txt"
           git push
+        continue-on-error: true
